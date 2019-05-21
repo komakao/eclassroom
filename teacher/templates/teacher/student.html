@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block title %} Teachers {% endblock %}
+{% block content %}
+<table class=table>
+  <tr>
+  <td>班級</td>
+  <td>學生</td>
+  </tr>
+{% for classroom, enrolls in students %}
+  <tr>
+   <td>{{classroom.name}}</a></td>
+    <td>{% for enroll in enrolls %}<button class="btn btn-default">
+     <img src="/static/images/avatar/s{{enroll.student.profile.avatar}}.png" style="width:60px;margin:0px;">{{enroll.seat}}){{enroll.student_id|nickname}}{% endfor %}
+       </button>
+</td>
+  </tr>
+{% endfor %}
+</table>
+        {% load pagination %}
+        {% get_pagination %}   
+{% endblock %}

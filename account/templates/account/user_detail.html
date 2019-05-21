@@ -1,0 +1,26 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+{% if user.id == request.user.id %}
+<a href="/account/password/{{user.id}}/0"><img src="/static/images/icon_edit1.png">修改密碼</a>　
+<a href="/account/nickname/{{user.id}}/0
+
+
+"><img src="/static/images/icon_edit2.png">修改暱稱</a>　
+{% endif %}
+
+<table class="table">
+<tr><td rowspan=4 width=300><img src="/static/avatar/b{{profile.avatar}}.png"></td>
+<td>帳號：{{user.username}}</td><td>暱稱：{{user.first_name}}</td><td>總積分：{{point}}</td></tr>
+<tr>
+<td>作業積分：{{profile.work}}</td>
+<td>小老師積分：{{profile.assistant}}</td>
+<td>創意秀積分：{{profile.creative}}</td>
+</tr>
+<tr>
+<td>討論區積分：{{profile.forum}}</td>
+<td>按讚積分：{{profile.like}}</td>
+<td>留言積分：{{profile.reply}}</td>
+</tr>
+</table>
+{% endblock %}

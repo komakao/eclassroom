@@ -1,0 +1,19 @@
+{% load tag %}
+<div class="memo-attachments">
+  {% for file in files %}
+    {% if file.visible %}
+      <div class="memo-attach-file">
+        <span class="label label-info">{{forloop.revcounter}}</span>
+        {{ file.publication_date }}
+        {% if file.title|is_pic %}
+          <a href="/student/speculation/showpic/{{file.id}}" target="_blank">{{file.title}}</a>
+        {% else %}
+          <a href="/student/speculation/download/{{file.id}}" target="_blank">{{file.title}}</a>
+        {% endif %}
+        {% if show_delete %}
+          <a href="#" class="delete" data-fileid="{{file.id}}"><img src="/static/images/delete.gif"> 刪除</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>

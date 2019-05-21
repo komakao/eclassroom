@@ -1,0 +1,60 @@
+@charset "utf-8";
+
+body {
+  font-size: 16px;
+}
+
+.navbar {
+  padding: 0px;
+}
+.wrap {display:block;margin:0;padding:0;text-align:left;word-wrap:break-word; width:100%;}
+.nospace{margin:0;padding:0;list-style:none;}
+
+#topbar{padding:10px 0; color: inherit;}
+#topbar .drop::after, #topbar li li .drop::after, #breadcrumb li a::after, .sidebar nav a::after{position:absolute; font-family:"FontAwesome"; font-size:10px; line-height:10px;}
+#topbar ul li{display:inline-block; margin-right:5px;}
+#topbar ul li:last-child{margin-right:0; padding-right:0;}
+#topbar i{line-height:normal;}
+#topbar li a{color:inherit;}
+#topbar .active a, #topbar a:hover, #topbar li:hover > a{color:#40B8FF; background-color:inherit;}
+#topbar li li a, #topbar .active li a{color:#FFFFFF; background-color:rgba(0,105,168,.7);/* #0069A8 */ border-color:rgba(255,255,255,.2);}
+#topbar li li:hover > a, #topbar .active .active > a{color:#FFFFFF; background-color:#0069A8;}
+#topbar .drop{padding-left:15px;}
+#topbar li li a, #topbar li li .drop{display:block; margin:0; padding:10px 15px;}
+#topbar .drop::after, #topbar li li .drop::after{content:"\f0d7";}
+#topbar .drop::after{top:25px; left:5px;}
+#topbar li li .drop::after{top:15px; left:5px;}
+
+#dropdown {
+    text-transform: none !important;
+    padding: 5px;
+    color: #FFFFFF;
+    background-color: rgb(10,110,175);
+    border-color: rgba(255,255,255,.2);
+}
+
+#footer{padding:20px 0; border-top:1px solid;}
+#footer *{margin:0; padding:0;}
+#footer{border-color:rgba(0,0,0,.1);}
+
+#backtotop{z-index:999; display:inline-block; position:fixed; visibility:hidden; bottom:20px; right:20px; width:36px; height:36px; line-height:36px; font-size:16px; text-align:center; opacity:.2;}
+#backtotop i{display:block; width:100%; height:100%; line-height:inherit;}
+#backtotop.visible{visibility:visible; opacity:.5;}
+#backtotop:hover{opacity:1;}
+
+/* Rows */
+.toprow{color:#FFFFFF; background-color:#0069A8;position:fixed; z-index: 999; top:0%;}
+.container{color:#474747; background-color:#FFFFFF; margin:20px auto; max-width:900px;}
+.footer, .footer a{color:#BCBCBC; background-color:#222222;}
+.clear, .group{display:block;}
+.clear::before, .clear::after, .group::before, .group::after{display:table; content:"";}
+.clear, .clear::after, .group, .group::after{clear:both;}
+
+a{outline:none; text-decoration:none;}
+
+.fl_left, .imgl{float:left;}
+.fl_right, .imgr{float:right;}
+
+.hoc{display:block; max-width:900px; margin:0 auto;}
+
+	

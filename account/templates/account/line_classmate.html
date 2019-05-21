@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+<table>
+    <tr>
+{% for enroll in enroll_list %}
+      <td><a href="/account/line/{{enroll.student_id}}/{{enroll.classroom_id}}/create">{{enroll.student.first_name}}</a></td>       
+{% endfor %}
+  </tr>
+</table>
+{% endblock %}

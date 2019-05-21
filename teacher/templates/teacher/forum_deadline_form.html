@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block header %}
+<script type="text/javascript" src="/static/scripts/moment.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<style>
+  .toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 20px; border-color: green;}
+  .toggle.ios .toggle-handle { border-radius: 20px; }
+</style>
+{% endblock %}
+{% block content %}
+<div>
+<button class="btn btn-success">{{fwork.title}}</button>
+</div>
+  <div class="card">
+    <div class="card-header">
+   {{fclass.classroom_id|classname}}
+    </div>
+    <div class="card-body">
+<label for="dtp_input1" class="col-md-2 control-label">
+                繳交期限
+              <input type="checkbox" {% if fclass.deadline %}checked{% endif %} data-forumid="{{fclass.forum_id}}" data-classroomid="{{fclass.classroom_id}}" data-status="{{fclass.deadline}}" data-toggle="toggle" data-style="ios" id="toggle">
+              </label>   
+<div class="container" id="date" {% if not fclass.deadline %}style="display:none"{% endif %}>
+    <form action="" class="form-horizontal"  role="form">
+        <fieldset>
+            <div class="form-group">  
+                <div class="input-group date" id="datetimepicker1" data-target-input="nearest" data-forumid="{{fclass.forum_id}}" data-classroomid="{{fclass.classroom_id}}">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+				<input type="hidden" id="dtp_input1" value="" /><br/>
+            </div>
+        </fieldset>
+    </form>
+
+</div>
+</div>
+</div>
+{% for class in fclasses %}
+{% if not class.classroom_id == fclass.classroom_id %}
+  <div class="col-xs-12 col-sm-6 col-md-4 other_class" {% if not fclass.deadline %}style="display:none;"{% endif %}> 
+  <div class="card">
+  <div class="card-header">
+   {{class.classroom_id|classname}} --期限：<span class="deadline_string">{% if class.deadline %}{{class.deadline_date|date:'Y/m/d H:i'}}{% else %}無{% endif %}</span>
+  </div>
+  <div class="card-body"> 
+<a data-forumid="{{class.forum_id}}" data-classroomid="{{class.classroom_id}}" href="#" role="btn" class="btn btn-primary apply">套用</a> <a data-forumid="{{class.forum_id}}" data-classroomid="{{class.classroom_id}}"  href="#" role="btn" class="btn btn-primary cancle">取消</a>
+  </div>    
+  </div>
+</div>
+	{% endif %}
+{% endfor %}
+{% endblock %}
+{% block footer_script %}
+          <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker({
+                defaultDate: '{{fclass.deadline_date|date:'Y/m/d H:i'}}'
+                }
+                );
+           $('#datetimepicker1').on("change.datetimepicker", function (e) {
+            var launcher = this;  
+            e.preventDefault();            
+            $.post('/teacher/forum/deadline/date/',
+            {
+                forumid: $(launcher).data('forumid'),
+                classroomid: $(launcher).data('classroomid'),
+                deadlinedate: e.date.format('YYYY/MM/DD HH:mm'),
+            },
+            function(data){
+            }
+		       );
+           });
+            });
+        </script>
+{% endblock %}
+
+{% block domready %}
+$("#toggle").change(function(e) {
+    var launcher = this;  
+    e.preventDefault();
+
+	if ($(this).is(":checked")) {
+      $('#date').show();
+      $('.other_class').show();
+			$(launcher).data("status", "True")
+  } else {
+      $('#date').hide();
+      $('.other_class').hide();
+			$(launcher).data("status", "False")
+  }
+
+  $.post('/teacher/forum/deadline/set/',
+      {
+        forumid: $(launcher).data('forumid'),
+        classroomid: $(launcher).data('classroomid'),
+        status: $(launcher).data('status'),
+      },
+    );
+
+});
+
+    Date.prototype.Format = function (fmt) { 
+    var o = {
+        "M+": this.getMonth() + 1, //月份 
+        "d+": this.getDate(), //日 
+        "h+": this.getHours(), //小时 
+        "m+": this.getMinutes(), //分              
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+};
+
+$(".apply").click(function(e) {
+    var launcher = this;  
+    var apply_date = new Date($("#datetimepicker1").data("date"));
+    e.preventDefault();
+  $.post('/teacher/forum/deadline/date/',
+      {
+        forumid: $(launcher).data('forumid'),
+        classroomid: $(launcher).data('classroomid'),
+        deadlinedate: apply_date.Format("yyyy/MM/dd hh:mm"),
+      },
+       function(data){
+        //alert("hi");
+        $(launcher).parent().parent().find(".deadline_string").html(apply_date.Format("yyyy/MM/dd hh:mm"));
+      }
+		);
+
+  $.post('/teacher/forum/deadline/set/',
+      {
+        forumid: $(launcher).data('forumid'),
+        classroomid: $(launcher).data('classroomid'),
+        status: "True",
+      },
+    );
+});
+$(".cancle").click(function(e) {
+    var launcher = this;  
+    e.preventDefault();
+
+  $.post('/teacher/forum/deadline/set/',
+      {
+        forumid: $(launcher).data('forumid'),
+        classroomid: $(launcher).data('classroomid'),
+        status: "False",
+      },
+      function(data){
+        //alert("hi");
+        $(launcher).parent().parent().find(".deadline_string").html("無");
+      }
+    );
+});
+{% endblock %}

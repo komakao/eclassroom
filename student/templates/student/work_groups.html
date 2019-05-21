@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block title %} Students {% endblock %}
+{% block content %}
+<BR>
+	        {% for key, assignment in lesson_dict %}
+	{{key}}){{assignment.0.0}}
+<table class="table">
+<tr>
+<td width=150>組別</td>
+<td width=150>小老師</td>
+<td>組員</td>  
+</tr>	
+                <tr>
+									<td>
+								{{assignment.3}}
+									</td>
+                <td>  
+									{% for assistant in assignment.2 %}
+				({{assistant.seat}}){{assistant.student_id|name}}<BR>                            
+									{% endfor %}
+                </td>
+									<td>               
+				{% for enroll, work in assignment.1 %}
+            {% if request.user.id in assistant %}<a target=_blank href="/teacher/scoring/{{classroom_id}}/{{enroll.0.student_id}}/{{forloop.parentloop.counter}}">{% endif %}({{enroll.seat}}){{enroll.student.first_name}}{% if request.user.id in assistant %}</a>{% endif %}
+					  -{% if not work %}<font color=green>尚未繳交</font>{% else %}{% if work.score > 0 %}{{work.score}}-{{work.scorer|name}}{% else %}<font color=red>尚未評分</font>{% endif %}{% endif %}
+					
+				{% endfor %}
+				</td>
+</table>
+{% endfor %}
+{% endblock %}

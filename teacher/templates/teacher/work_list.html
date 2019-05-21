@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+        {% if classroom.lesson < 10 %}
+        <form class="form-horizontal" method="POST" action="">
+                {% csrf_token %}
+                {{ formset.management_form }}
+        <table class="table">
+            <tr>
+                <td>名稱</td>              
+                <td>
+                    使用分組 
+                </td>  
+                <td colspan=2>功能</td>		
+		{% for form in formset %}
+            <tr>
+            <td>{{forloop.counter}}){{classroom.lesson|lesson_name:form.index.value}}</td>
+            <td>
+            <input type="hidden" name={{form.id.auto_id|slice:"3:"}} value={{form.id.value}}>
+            <input type="hidden" name={{form.index.auto_id|slice:"3:"}} value={{form.index.value}}>
+            <input type="hidden" name={{form.typing.auto_id|slice:"3:"}} value={{form.typing.value}}>            
+            <input type="hidden" name={{form.classroom_id.auto_id|slice:"3:"}} value={{form.classroom_id.value}}>	
+            <select name="{{form.group_id.auto_id|slice:"3:"}}">
+            <option value="0"{% if form.group_id.value == 0 %} selected{% endif %}>不分組</option>
+            {% for group in groups %}
+            <option value="{{group.id}}" {% if form.group_id.value == group.id %}selected{% endif %}>{{group.title}}</option>
+            {% endfor %}
+          </select>
+        </td>			
+            <td><a href="/teacher/work/class/0/{{classroom.id}}/{{form.index.value}}" target="_blank">評分</a></td>
+            <td><a href="/student/memo/0/{{classroom.id}}/{{form.index.value}}" target="_blank">心得</a></td>			
+            </tr>
+        {% endfor %}
+        <tr><td></td><td>
+                            <button type="submit" class="btn btn-block btn-primary">送出</button>
+        </form>       
+        <td>        <form method="POST" action="/teacher/work/group/set/0/{{classroom.id}}/" onsubmit="return confirm('確定要設定嗎?');"> 
+            {% csrf_token %}
+                <select name="group">
+                        <option value="0" selected>不分組</option>
+                        {% for group in groups %}
+                        <option value="{{group.id}}">{{group.title}}</option>
+                        {% endfor %}
+                      </select>
+            <td><button type="submit" class="btn btn-block btn-success">批次設定</button></td></form>
+        </td>
+    <td>
+    </td>
+<td></td></tr>
+        </table>
+		{% else %}
+        <table class="table">
+            <tr>
+                <td>名稱</td>                
+                <td colspan=3>功能</td>		
+            </tr>
+		{% for work in works %}
+            <tr>
+            <td>{{work.0}}){{work.1}}</td>			
+            <td><a href="/teacher/work/class/0/{{classroom.id}}/{{forloop.counter}}" target="_blank">評分</a></td>
+            <td><a href="/student/memo/{{classroom.id}}/{{forloop.counter}}" target="_blank">心得</a></td>			
+            <td>  
+            {% if classroom.lesson == 4 %}
+            <a href="/teacher/work/word/{{classroom.lesson}}/{{classroom.id}}/{{forloop.counter}}" target="_blank">匯出Word</a>
+            {% endif %}
+              </td>
+            </tr>
+        {% endfor %}
+        </tr>
+
+</table>
+        {% endif %}
+{% endblock %}

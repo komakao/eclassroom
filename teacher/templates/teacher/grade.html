@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block header %}
+<style>
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    border: 0px solid #73AD21;	
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+<a href="/teacher/grade/0/1/{{classroom.id}}" role="btn" class='btn {% if typing == 0 %}btn-primary{% else %}btn-outline-info{% endif %}'>指定作業</a>
+<a href="/teacher/grade/1/1/{{classroom.id}}" role="btn" class='btn {% if typing == 1 %}btn-primary{% else %}btn-outline-info{% endif %}'>自訂作業</a>
+<a href="/teacher/grade/excel/{{typing}}/1/{{classroom.id}}" role="btn" class="btn btn-warning">匯出Excel</a>
+<BR>
+班級名稱：{{ classroom.name }}<BR>
+<table class="table" style="max-width:850px">
+  <tr>
+  <td style="padding:2px">座號</td>
+  <td style="padding:2px">姓名</td>
+  <td align="center" style="padding:0px">成績</td>   
+    <td align="center" style="padding:0px"><button type="button" class="btn btn-warning btn-circle">心得</button></td>
+    <td align="center" style="padding:0px"><button type="button" class="btn btn-warning btn-circle">心得</button></td>
+    <td align="center" style="padding:0px"><button type="button" class="btn btn-warning btn-circle">心得</button></td>
+  
+                {% for assignment in lesson_list %}                    
+                     <td align="center" style="padding:0px"><button type="button" class="btn btn-warning btn-circle">
+					 {% if typing == 0 %}{{assignment.0}}{% else %}{{assignment.title}}{% endif %}
+					 </button
+					 </td>              
+                {% endfor %}
+    
+</tr>
+  <tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>全部</td>
+  <td>上學期</td>
+  <td>下學期</td>
+  {% for assignment in lesson_list %}      
+    <td align="center" style="padding:0px">  
+  {% if typing == 0 %}{{assignment.1.0}}{% else %}{{forloop.counter}}{% endif %}
+   </td>
+  {% endfor %}
+  </tr>
+
+{% for enroll, enroll_score, memo, grade in data %}
+<tr>
+  <td style="padding:2px">{{enroll.seat}}</td>
+  <td style="padding:2px" nowrap>{{enroll.student.first_name}}</td>
+  <td style="padding:0px" align=center><button type="button" class="btn btn-danger btn-circle">{{grade}}</button></td>
+  <td align=center style="padding:0px"><button type="button" class="btn btn-danger btn-circle">{% if memo.0 > 0 %}{{memo.0}}{% else %}?{% endif %}</button></td>
+  <td align=center style="padding:0px"><button type="button" class="btn btn-danger btn-circle">{% if memo.1 > 0 %}{{memo.1}}{% else %}?{% endif %}</button></td>
+  <td align=center style="padding:0px"><button type="button" class="btn btn-danger btn-circle">{% if memo.2 > 0 %}{{memo.2}}{% else %}?{% endif %}</button></td>
+
+  {% for score, index in enroll_score %}
+  <td align=center style="padding:0px"><button type="button" class="btn btn-{% if score == -1 %}success{% elif score == "X" %}dark{% else %}info{% endif %} btn-circle">{% if score == -1 %}V{% elif score == "X" %}X{% else %}{{score}}{% endif %}</button></td>
+  {% endfor %}
+</tr>
+{% endfor %}
+  </table>
+<button type="button" class="btn btn-info btn-circle">100</button>100分 <button type="button" class="btn btn-success btn-circle">V</button>80分 <button type="button" class="btn btn-dark btn-circle">X</button>60分 
+　　　成績=作業平均*0.6+心得*0.4 
+  
+{% endblock %}

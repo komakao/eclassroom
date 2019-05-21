@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+<a href="" class="btn btn-success" role="btn">{{classroom.name}}</a>
+<a href="" class="btn btn-success" role="btn">{{exam.title}}</a>
+<a href="/teacher/exam/excel/{{classroom.id}}/{{exam.id}}" class="btn btn-success" role="btn">匯出Excel</a>
+<table class="table">
+	<tr>
+	<td>座號</TD>
+  <td>姓名</td>
+	<td>次數</TD>	
+	<td>平均</TD>
+  <td>最高分</td>	
+	<td colspan=100>分數</td>
+	</tr>	
+{% for enroll, works, avg, max in scores %}
+	<tr>
+	<TD>{{enroll.seat}}</TD>
+  <td>{{enroll.student_id|nickname}}</td>
+	<td>{{works|length}}</td>
+	<TD>{{avg}}</TD>
+  <td>{{max}}</td>		
+		{% for work in works %}
+	<td><a href="/student/exam/score/{{classroom.id}}/{{exam.id}}/{{work.id}}/0">{{work.score}}</a></td>
+		{% endfor %}
+	</tr>
+{% endfor %}
+</table>
+	{% endblock %}
+	{% block domready %}
+	    $('body').css('background-image','url(/static/images/back1.gif)');
+	{% endblock %}
+	

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+          {% for key, assignment in lesson_dict %}
+          {% if classroom.lesson == 1 %}          
+      <button id="jump{{key}}" class="btn btn-outline-success">{% if typing == 0 %}{{key}}){{assignment.0.2}}{% else %}{{forloop.counter}}){{assignment.0.title}}{% endif %}</button>
+      {% elif classroom.lesson == 2 %}
+      <button id="jump{{key}}" class="btn btn-outline-success">{% if typing == 0 %}{{key}}){{assignment.0.0}}{% else %}{{forloop.counter}}){{assignment.0.title}}{% endif %}</button>
+      {% endif %}
+      {% endfor %}
+<BR>
+          {% for key, assignment in lesson_dict %}
+          {% if classroom.lesson == 1 %}             
+          <button id="group{{key}}" class="btn btn-primary">{% if typing == 0 %}{{key}}){{assignment.0.2}}{% else %}{{forloop.counter}}){{assignment.0.title}}{% endif %}</button>
+          {% elif classroom.lesson == 2 %}
+          <button id="group{{key}}" class="btn btn-primary">{% if typing == 0 %}{{key}}){{assignment.0.0}}{% else %}{{forloop.counter}}){{assignment.0.title}}{% endif %}</button>
+          {% endif %}
+          {% if assignment.2  == -1 %}
+<BR>不使用分組<BR><BR>
+          {% else %}
+<button class="btn btn-warning">分組：{{assignment.2|group_name}}</button>         
+<table class="table">
+<tr>
+<Td width=150>組別</Td>
+<td width=150>小老師</td>
+<td>組員</td>  
+</tr>	
+  {% for groups, works, assistants, group_name in assignment.1 %}
+                <tr>
+									<td nowrap>{{group_name}}</td>
+                <td>
+                  {% for assistant in assistants %}
+				({{assistant.seat}}){{assistant.student_id|nickname}}<BR>                            
+									{% endfor %}
+                </td>
+									<td>               
+				{% for enroll, score, scorer, memo in works %}                    
+            {% if request.user.id in assistants or request.user.id == classroom.teacher_id %}<a target=_blank href="/teacher/scoring/{{typing}}/{{classroom.id}}/{{enroll.student_id}}/{{assignment.0.2}}">{% endif %}({{enroll.seat}}){{enroll.student.first_name}}{% if request.user.id in assistant or request.user.id == classroom.teacher_id %}</a>{% endif %}
+					  -{% if score == -2 %}<font color=green>尚未繳交</font>{% else %}{% if score > 0 %}{{score}}-{{scorer}}{% else %}<font color=red>尚未評分</font>{% endif %}{% endif %}
+					
+				{% endfor %}
+				</td>
+  </tr>
+
+  {% endfor %}
+</table>
+{% endif %}
+{% empty %}
+目前沒有作業
+{% endfor %}
+
+{% endblock %}
+{% block domready %}
+{% for key, assignment in lesson_dict %}
+  $('#jump{{key}}').click(function(){
+    $("body,html").animate({
+        scrollTop: $('#group{{key}}').offset().top - 100
+    }, 600);
+  });
+{% endfor %}
+{% endblock %}

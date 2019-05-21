@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+        <h3>班級名稱：{{classroom.name}}</h3>
+        <table class="table">
+             <tr>
+               <td>教師</td><td>{{message.author_id|nickname}}</td>
+            </tr>         
+            <tr>
+                <td>時間</td><td>{{message.time}}</td>
+            </tr>
+            <tr>
+                <td>主旨</td> <td>{{message.title}}</td>
+            </tr>
+            <tr>
+                <td>內容</td><td>{{message.content|safe}}</td>
+            </tr>
+          <tr><td>附件</td><Td>
+               {% for file in files %}
+		  <BR><button class="btn btn-info">
+              {{forloop.revcounter}}
+        </button> 
+		          {{file.publication_date}}	
+			        {% if file.title|is_pic %}
+		<a href="/account/line/showpic/{{file.id}}" target="_blank">{{file.title}}</a>
+			        {% else %}
+			<a href="/account/line/download/{{file.id}}" target="_blank">{{file.title}}</a>
+			        {% endif %}
+		      {% endfor %}
+            </Td></tr>
+
+           
+        </table>
+        <table> 
+		   {% if request.user.id|is_teacher:classroom.id %}
+           {% for announce_read in announce_reads %}
+            <tr>
+            <td>
+           ({{announce_read.0}}){{announce_read.1}}：
+           {% if announce_read.2.read %}
+           已讀
+           {% else %}
+           <font color=red>未讀</font>           
+           {% endif %}
+           </td>
+           </tr>
+           {% endfor %}
+            {% endif %}
+        </table>
+{% endblock %}

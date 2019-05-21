@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+<a href="/survey/pre_survey/teacher/{{classroom_id}}" role="button" class="btn btn-outline-success">課前問卷</a>
+<a href="/survey/post_survey/teacher/{{classroom_id}}" role="button" class="btn btn-outline-success">課後問卷</a>   
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+	<div class="row">
+		<div class="span12">    
+            <p class="lead">分組使用:</p>
+			    <div class="btn-group"><a id="dropdown_group" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" data-group="{{teamgroup.id}}" href="#">{{teamgroup.title}} <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li><a href="#" data-groupid=0>不分組</a></li>					
+					{% for group in groups %}
+            <li><a href="#" data-groupid={{group.id}}>{{group.title}}</a></li>
+					{% endfor %}
+        </ul>
+			</div>
+  <a href="#" role="btn" class="btn btn-outline-success" id="submit" data-teamid="{{team_id}}" data-classroomid="{{classroom.id}}">送出</a><BR><BR>
+            <p class="lead">分組情形:</p>
+            <div id="tab" class="btn-group" data-toggle="buttons-radio">
+              <a href="#group0" class="btn btn-large btn-outline-info {% if not teamgroup.id %}active{% endif %}" data-toggle="tab">不分組</a>              
+{% for group in groups %}              
+              <a href="#group{{group.id}}" class="btn btn-large btn-outline-info {% if group.id == teamgroup.id %}active{% endif %}" data-toggle="tab">{{group.title}}</a>
+{% endfor %}                       
+            </div>
+            <div class="tab-content">
+              <div class="tab-pane {% if not teamgroup.id %}active{% endif %}" id="group0">
+              
+              </div>
+     
+              {% for group_id, groups in group_list %}
+              <div class="tab-pane {% if group_id == teamgroup.id %}active{% endif %}" id="group{{group_id}}">
+                <table class="table">                  
+                {% for group, members in groups %}
+                <tr>
+                  <td>第{{group|add:1}}組：</td><td>{% for member in members %}<button class="btn btn-outline-success">({{member.seat}}){{member.student_id|nickname}}</button>{% endfor %}</td>                  
+                  </tr>
+                {% endfor %}
+                </table>                  
+              </div>
+              {% endfor %}
+            </div>                            
+	</div>
+</div>
+
+{% endblock %}
+{% block domready %}
+    $('.dropdown-menu li a').click(function(event) {
+        var option = $(event.target).text();
+        var group_id = $(event.target).data("groupid");
+        $(event.target).parents('.btn-group').find('.dropdown-toggle').html(option+' <span class="caret"></span>');
+			  $(event.target).parents('.btn-group').find('.dropdown-toggle').attr('data-group',group_id);
+    });
+		$("#submit").click(function(event) {
+			  var launcher = this;  
+        var group_id = $("#dropdown_group").data("group");
+        $.post('/teacher/team/group/set/',
+        {
+            teamid: $(launcher).data('teamid'),
+            classroomid: $(launcher).data('classroomid'),
+            groupid: group_id,
+        });
+        $(location).attr('href', '/teacher/team/group/{{classroom.id}}/{{team_id}}')			
+    });		
+	    $('body').css('background-image','url(/static/images/back1.gif)');
+	{% endblock %}

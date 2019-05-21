@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block title %} Teachers {% endblock %}
+{% block content %}
+<button type="button" class="btn btn-success">{{exam.title}}</button>
+{% if exam.user_id == request.user.id %}
+{% if not exam.opening %}
+<a onclick="return confirm('發佈之後不能再新增題目，您確定發佈嗎?')" href="/teacher/exam/publish/{{exam.id}}" class="btn btn-warning" role="btn"><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> 發佈測驗</a>
+<a href="/teacher/exam/question/add/{{exam.id}}" class="btn btn-warning" role="btn"><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> 新增題目</a>
+{% endif %}
+{% endif %}
+<div class="card card-{% if score < 60 %}danger{% else %}success{% endif %}">
+  <div class="card-header">總分:{{score_total}}</div>
+</div>
+        {% for question in questions %}
+ <div class="card card-default"> 
+              {% if question.types == 1 %}
+   <div class="card-header"><button type="button" class="btn btn-primary">{{forloop.revcounter}}</button> ({{question.score}}分) 是非題 
+    <A href="/teacher/exam/question/delete/{{exam.id}}/{{question.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
+    <a href="/teacher/exam/question/edit/{{exam.id}}/{{question.id}}"><img src="/static/images/edit.gif"> 編輯</a>
+  </div>
+  <div class="card-body">
+    <div class="card card-default">
+      <div class="card-body" style="font-size:16px">
+        <button class="btn btn-{% if question.answer == "1" %}info{% else %}default{% endif %}">是</button>
+        <button class="btn btn-{% if question.answer == "0" %}info{% else %}default{% endif %}">否</button>
+        {{question.title|linebreaksbr}}
+        {% if question.title_filename %}
+        <BR><img src="/static/exam/{{question.title_filename}}" style="max-width: 900px;">
+        {% endif %}  
+      </div>
+      
+    </div>
+  </div>
+            
+              {% elif question.types == 2 %}
+	 <a name="{{question.id}}"></a>
+  <div class="card-header"><button type="button" class="btn btn-primary">{{forloop.revcounter}}</button> ({{question.score}}分) 選擇題
+		{% if exam.user_id == request.user.id %}
+    <A href="/teacher/exam/question/delete/{{exam.id}}/{{question.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
+    <a href="/teacher/exam/question/edit/{{exam.id}}/{{question.id}}"><img src="/static/images/edit.gif"> 編輯</a>
+		{% endif %}
+</div>
+  <div class="card-body">
+<div class="card card-default">
+  <div class="card-body" style="font-size:16px">{{question.title|linebreaksbr}}
+      {% if question.title_filename %}
+      <BR><img src="/static/exam/{{question.title_filename}}" style="max-width: 900px;">
+      {% endif %}  
+  </div>
+</div>
+<button class="btn btn-{% if question.answer == "1" %}info{% else %}default{% endif %}">{{question.option1}}</button>
+<button class="btn btn-{% if question.answer == "2" %}info{% else %}default{% endif %}">{{question.option2}}</button>	
+<button class="btn btn-{% if question.answer == "3" %}info{% else %}default{% endif %}">{{question.option3}}</button>
+<button class="btn btn-{% if question.answer == "4" %}info{% else %}default{% endif %}">{{question.option4}}</button>
+</div>   
+
+{% elif question.types == 3 %}
+<a name="{{question.id}}"></a>
+
+<div class="card-header"><form method="POST" action="/teacher/exam/check/{{exam.id}}/{{question.id}}/"><button type="button" class="btn btn-primary">{{forloop.revcounter}}</button> ({{question.score}}分) 填充題
+ {% if exam.user_id == request.user.id %}
+ <A href="/teacher/exam/question/delete/{{exam.id}}/{{question.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
+ <a href="/teacher/exam/question/edit/{{exam.id}}/{{question.id}}"><img src="/static/images/edit.gif"> 編輯</a>
+ <span class="form-group form-inline" style="display:inline"><img src="/static/images/edit.gif"> 學生作答
+ <select name="class" class="form-control">
+ {% for exam_class in exam_classes %}
+ <option value="{{exam_class.classroom_id}}">{{exam_class.classroom_id|classroom_name}}</option>
+ {% endfor %}
+</select>
+{% csrf_token %}
+ <input type="submit" value="批閱" class="form-control">
+ <input type="hidden" name="answer" value="{{question.answer}}">
+</span>
+ {% endif %}
+</form>
+</div>
+
+<div class="card-body">
+<div class="card card-default">
+<div class="card-body" style="font-size:16px">{{question.title|linebreaksbr}}
+   {% if question.title_filename %}
+   <BR><img src="/static/exam/{{question.title_filename}}" style="max-width: 900px;">
+   {% endif %}  
+</div>
+</div>
+<button class="btn btn-info">{{question.answer}}</button>
+</div>   
+        
+{% elif question.types == 4 %}
+<a name="{{question.id}}"></a>
+<div class="card-header"><button type="button" class="btn btn-primary">{{forloop.revcounter}}</button> ({{question.score}}分) 簡答題
+ {% if exam.user_id == request.user.id %}
+ <A href="/teacher/exam/question/delete/{{exam.id}}/{{question.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
+ <a href="/teacher/exam/question/edit/{{exam.id}}/{{question.id}}"><img src="/static/images/edit.gif"> 編輯</a>
+ {% endif %}
+</div>
+<div class="card-body">
+<div class="card card-default">
+<div class="card-body" style="font-size:16px">{{question.title|linebreaksbr}}
+   {% if question.title_filename %}
+   <BR><img src="/static/exam/{{question.title_filename}}" style="max-width: 900px;">
+   {% endif %}  
+</div>
+</div>
+<button class="btn btn-info">{{question.answer}}</button>
+</div>      
+{% endif %}
+	 </div>
+        {% endfor %}
+  
+    
+{% endblock %}

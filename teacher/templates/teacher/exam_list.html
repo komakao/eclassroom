@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+	        <a href="" class="btn btn-success" role="btn">{{classroom.name}}</a>
+<BR>
+        <a href="/teacher/exam/add/{{classroom.id}}" class="btn btn-warning" role="btn"><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> 新增測驗</a>
+
+			{% for exam, examclass in exams %}
+<h2 id="{{exam.id}}"></h2>
+<div class="card card-default">
+<div class="card-header">{{exam.title}}-- {{examclass.publication_date}} {{exam.user_id|nickname}}老師 -- 期限:{% if not examclass.deadline %}無{% else %}{{examclass.deadline_date}}{% endif %}</div>
+  <div class="card-body">
+						{% if exam.user_id == request.user.id %}
+						<a href="/teacher/exam/edit/{{classroom.id}}/{{exam.id}}" class="btn btn-outline-success" role="btn"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 修改</a>
+						<!--
+						<a href="/teacher/exam/category/{{classroom.id}}/{{exam.id}}" class="btn btn-outline-success" role="btn"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> 分類</a>
+						-->
+						<a href="/teacher/exam/class/{{exam.id}}" class="btn btn-outline-success" role="btn"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> 班級</a>
+            <a href="/teacher/exam/deadline/{{classroom.id}}/{{exam.id}}" class="btn btn-outline-success" role="btn"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> 期限</a>		
+            <a href="/teacher/exam/round/{{classroom.id}}/{{exam.id}}" class="btn btn-outline-success" role="btn"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> 次數</a>								
+						<a href="/teacher/exam/question/{{exam.id}}" class="btn btn-primary" role="btn"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span> 題目</a>
+            <a href="/teacher/exam/score/{{classroom.id}}/{{exam.id}}" class="btn btn-primary" role="btn"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 結果</a>						
+		        {% else %}
+            <a href="/teacher/exam/show/{{exam.id}}" class="btn btn-primary" role="btn"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span> 素材</a>								
+						{% endif %}
+           <a href="/student/exam/{{classroom.id}}/#{{exam.id}}" class="btn btn-warning" role="btn"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 學生</a>						
+	</div>
+</div>
+        {% endfor %}
+	{% endblock %}
+	
+	{% block domready %}
+	    $('body').css('background-image','url(/static/images/back1.gif)');
+	{% endblock %}
+	

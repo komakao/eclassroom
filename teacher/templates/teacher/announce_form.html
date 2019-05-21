@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block header %}
+<style>
+
+.bgcheck {
+  height: 100%;
+  display: inline;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.span_pseudo, .chiller_cb span:before, .chiller_cb span:after {
+  content: "";
+  display: inline;
+  background: #fff;
+  width: 0;
+  height: 0.2rem;
+  position: absolute;
+  transform-origin: 0% 0%;
+}
+
+.chiller_cb {
+  position: relative;
+  height: 2rem;
+  display: inline;
+  align-items: center;
+}
+.chiller_cb input {
+  display: none;
+}
+.chiller_cb input:checked ~ span {
+  background: #fd2727;
+  border-color: #fd2727;
+}
+.chiller_cb input:checked ~ span:before {
+  width: 1rem;
+  height: 0.15rem;
+  transition: width 0.1s;
+  transition-delay: 0.3s;
+}
+.chiller_cb input:checked ~ span:after {
+  width: 0.4rem;
+  height: 0.15rem;
+  transition: width 0.1s;
+  transition-delay: 0.2s;
+}
+.chiller_cb input:disabled ~ span {
+  background: #ececec;
+  border-color: #dcdcdc;
+}
+.chiller_cb input:disabled ~ label {
+  color: #dcdcdc;
+}
+.chiller_cb input:disabled ~ label:hover {
+  cursor: default;
+}
+.chiller_cb label {
+  padding-left: 2rem;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  margin-bottom:0;
+}
+.chiller_cb span {
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid #ccc;
+  position: absolute;
+  left: 0;
+  transition: all 0.2s;
+  z-index: 1;
+  box-sizing: content-box;
+}
+.chiller_cb span:before {
+  transform: rotate(-55deg);
+  top: 1rem;
+  left: 0.37rem;
+}
+.chiller_cb span:after {
+  transform: rotate(35deg);
+  bottom: 0.35rem;
+  left: 0.2rem;
+}
+
+</style>
+
+<script type="text/javascript" src="//cdn.ckeditor.com/4.5.9/standard-all/ckeditor.js"></script>
+<script>
+CKEDITOR.plugins.add('dreamerpasteimage', {
+    init: function(editor) {
+        editor.on('paste', function(e) {
+            var reader = new FileReader();
+            reader.onload = function(evt) {
+                var img = CKEDITOR.dom.element.createFromHtml("<img src='"+evt.target.result+"' />");
+                e.editor.insertElement(img);
+            }
+            e.data.dataTransfer._.files.forEach(function(file, index) {
+                console.log('paste: '+index);
+                reader.readAsDataURL(file);
+            });
+        });
+    },
+});
+</script>
+{% endblock %}
+{% block content %}
+         <form action="" enctype="multipart/form-data"  method="post">
+            <table class="table">
+            <tr><th nowrap>班級名稱:</th><Td> 
+            {% for classroom in classrooms %}
+            <div class="bgcheck">
+                    <div class="chiller_cb">
+            <input  {% if classroom.id == class.id %}checked{% endif %} value="{{classroom.id}}" name="classrooms" type="checkbox" id="myCheckbox{{forloop.counter}}" value="{{classroom.id}}}">
+            <label for="myCheckbox{{forloop.counter}}">{{classroom.name}}</label>
+            <span></span>
+            </div>
+            </div>
+            {% endfor %}
+            </td>
+             </tr>
+                {{ form.as_table }}
+                <tr><th>檔案:</td><td><input id="file" name="files" type="file"  multiple/><input id="submit" type="submit" value="送出"><td</tr>
+
+            </table>
+            {% csrf_token %}
+        </form>
+{% endblock %}
+{% block domready %}
+    CKEDITOR.replace("id_content", {
+        extraPlugins: 'colorbutton,colordialog,dreamerpasteimage',
+    } );	
+{% endblock %}

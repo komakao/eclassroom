@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+		 <a href="/teacher/work/class/{{typing}}/{{classroom.id}}/{{index}}" role="button" class="btn btn-outline-info">座號</a>
+     <button class="btn btn-info active">組別</button>
+        <table class="table">
+        <tr>
+            <td>學生</td>
+            <td>組別</td>
+            <td>功能</td>
+        </tr>
+        {% for list in classmate_work  %}
+                <tr>
+                <td>
+                {% if not list.1.user_id == 0 %} 
+                        {{list.0.seat}})<a href="/teacher/scoring/{{typing}}/{{classroom.id}}/{{list.0.student.id}}/{{index}}">{{list.0.student.first_name}}-{% if list.1 %}{{list.1.publication_date}}{% endif %}
+                    {% if list.1.scorer > 0 %}
+                        ({{list.1.score}}-{{list.1.scorer|nickname}})
+                    {%  endif %}
+                        </a><br/>
+                {% else %}
+                        {{list.0.seat}}){{list.0.student.first_name}}-尚未繳交<br/>
+                {% endif %}
+                </td>
+	{% if list.4 == -1 or list.4 >= classroom.group_number %}
+	<td>{{list.4}}尚未分組</td>
+	{% else %}
+	<td>第{{list.4|add:1}}組</td>
+	{% endif %}
+								{% if list.1.user_id > 0 and list.5 > 0 %}
+                <td>{% if list.2 > 0 %}<a class="assistant btn btn-primary active" role="button" href="/teacher/work/assistant/make/" data-classroomid="{{classroom.id}}" data-userid="{{ list.1.user_id }}"  data-action="unset"  data-lesson="{{ lesson }}"  data-index="{{ index }}">取消小老師</a>{% else %}<a class="assistant btn btn-outline-primary" role="button" href="/teacher/work/assistant/make" data-classroomid="{{classroom.id}}" data-userid="{{ list.1.user_id }}"  data-action="set"  data-lesson="{{ lesson }}"  data-index="{{ index }}">設為小老師</a>{% endif %}</td>
+                {% else %}
+								<td></td>
+								{% endif %}
+                </tr>
+        {% endfor %}
+        </table>
+{% endblock %}
+{% block domready %}
+  $('a.assistant').click(function(e){
+    var launcher = this;  
+    e.preventDefault();
+    $.post('/teacher/work/assistant/make/',
+      {
+        userid: $(launcher).data('userid'),
+        action: $(launcher).data('action'),
+        typing: {{typing}},		        
+        lesson: $(launcher).data('lesson'),
+        index: $(launcher).data('index'),
+        classroomid: $(launcher).data('classroomid'),
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          var previous_action = $(launcher).data('action');
+		      if (previous_action == 'set') {
+               $(launcher).removeClass("btn-default").addClass("btn-info active");
+               $(launcher).html("取消小老師");
+               $(launcher).data('action', 'unset');
+           } else {
+               $(launcher).removeClass("btn-info active").addClass("btn-default");
+               $(launcher).html("設為小老師");
+               $(launcher).data('action', 'set');               
+           }
+        } else {
+          alert("hello");
+	    	}
+      }
+    );
+  });
+{% endblock %}

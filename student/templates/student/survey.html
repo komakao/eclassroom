@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %} Teachers {% endblock %}
+{% load tag %}
+{% block content %}
+<a href="/survey/pre_result/{{classroom_id}}" role="button" class="btn btn-outline-success">課前問卷</a>
+<a href="/survey/post_result/{{classroom_id}}" role="button" class="btn btn-outline-success">課後問卷</a>   
+{% endblock %}

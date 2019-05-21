@@ -1,0 +1,23 @@
+<li class="list-group-item material" id="m_{{ work.id }}">{% load tag %}
+  <div class="panel panel-default">
+    <div class="panel-body{% if work.types == 1 or work.types == 3 %} memo-content{% elif work.types == 2 %} embed-responsive embed-responsive-16by9{% endif %}" data-type="{{ work.types }}">
+      {% spaceless %}
+      {% if work.types == 1 %}
+        {{work.text|memo|safe}}
+      {% elif work.types == 2 %}
+        <iframe width="560" height="315" class="embed-responsive-item" src="https://www.youtube.com/embed/{{work.youtube|number}}?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
+      {% elif work.types == 3 %}
+        <img src="/static/upload/{{work.filename}}" class="annotatable" style="max-width: 100%" />
+      {% elif work.types == 4 %}
+        外部網址：<a href="{{work.link}}" target=_blank>{{work.title}}</a>
+      {% endif %}
+      {% endspaceless %}
+    </div>
+    {% if work.memo or work.types == 2 %}<div class="panel-footer">
+      {% if work.memo %}<div>
+        {{ work.memo|memo|safe }}
+      </div>{% endif %}
+      {% if work.types == 2 %}<button type="button" class="btn btn-primary btn-xs btn-add-marker">＋新增時間標記</button>{% endif %}
+    </div>{% endif %}
+  </div>
+</li>

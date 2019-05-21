@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Create a question{% endblock %}
+{% block content %}
+	學生姓名：{{student.first_name}}
+    <table class="table">
+    <tr>
+        <td>編號</td>
+        <td>作品</td>
+        <td>心得</td>
+
+    </tr>
+    {% for key, assignment in lesson_dict %}
+        <tr>
+        <td>{{key}}</td>
+            <td nowrap>{{assignment.0}}</td>      
+            <td>{{assignment.1.memo}}</td>           
+        </tr>      
+  {% endfor %}
+</table>
+  {% endblock %}

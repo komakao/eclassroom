@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="/teacher/exam/import/question/{{types}}/{{exam_id}}" class="btn btn-primary" role="btn">建立題目</a>
+{% if types == 1 %}
+<table class="table">
+    <tr>
+    <td>題目</td>
+    <td>答案</td>
+    <td>配分</td>    
+    </tr>
+  {% for question in questions %}  
+    <tr>
+    <td>{{question.title}}</td>
+    <td>{{question.answer}}</td>    
+    <td>{{question.score}}</td>        
+    </tr>
+  
+  {% endfor %}
+  </table>
+{% elif types == 2 %}
+<table class="table">
+    <tr>
+    <td>題目</td>
+    <td>選項1</td>
+    <td>選項2</td>
+    <td>選項3</td>
+    <td>選項4</td>    
+    <td>答案</td>
+    <td>配分</td>    
+    </tr>
+  {% for question in questions %}  
+    <tr>
+    <td>{{question.title}}</td>
+    <td>{{question.option1}}</td>
+    <td>{{question.option2}}</td>
+    <td>{{question.option3}}</td>
+    <td>{{question.option4}}</td>
+    <td>{{question.answer}}</td>    
+    <td>{{question.score}}</td>        
+    </tr>
+  
+  {% endfor %}
+  </table>
+{% elif types == 3 %}
+<table class="table">
+  <tr>
+  <td>題目</td>
+  <td>答案</td>
+  <td>配分</td>    
+  </tr>
+{% for question in questions %}  
+  <tr>
+  <td>{{question.title}}</td>
+  <td>{{question.answer}}</td>    
+  <td>{{question.score}}</td>        
+  </tr>
+
+{% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}

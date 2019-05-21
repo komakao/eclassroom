@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block header %}
+<link href="/static/css/checkbox.css" rel="stylesheet" type="text/css" media="all">
+{% endblock %}
+{% block content %}
+<a href="/teacher/team/{{classroom_id}}/#{{team.id}}" class="btn btn-success" role="btn">{{team.title}}</a>
+         <form action="" enctype="multipart/form-data"  method="POST">
+            <table class="table">
+           <tr><th nowrap>年級:</td>
+                <td>
+              {% for level in levels %}
+              <label for="level{{forloop.counter}}" class="btn btn-warning">{{level.title}}<input  {% if level.id|int_to_str in team.levels %}checked{% endif %} value="{{level.id}}" name="levels" type="checkbox" id="level{{forloop.counter}}" class="badgebox" value="{{level.id}}"><span class="badge">&check;</span></label>
+              {% endfor %}
+              </td>             
+              <tr><th nowrap>學習領域:</td>
+                <td>
+              {% for domain in domains %}
+              <label for="domain{{forloop.counter}}" class="btn btn-primary">{{domain.title}}<input  {% if domain.id|int_to_str in team.domains %}checked{% endif %} value="{{domain.id}}" name="domains" type="checkbox" id="domain{{forloop.counter}}" class="badgebox" value="{{domain.id}}" ><span class="badge">&check;</span></label>
+              {% endfor %}
+              </td>
+              </tr>
+                       
+  </table>
+           
+            {% csrf_token %}
+            <input type="submit" value="送出">
+        </form>
+{% endblock %}

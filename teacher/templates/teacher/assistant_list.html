@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+        {% for classroom in classrooms %}
+  <div class="card card-default">
+  <div class="card-header">{{classroom.name}}({{classroom.lesson_choice}})--{{classroom.teacher_id|nickname}}老師</div>
+  <div class="card-body">
+                <a href="/student/classroom/{{classroom.id}}/classmate/" class="btn btn-outline-info" role="btn"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> 學生</a>
+                <a href="/teacher/announce/{{classroom.id}}" class="btn btn-outline-success" role="btn"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> 公告</a>  
+							  <a href="/teacher/work/{{classroom.id}}" role="button" class="btn btn-outline-success">指定作業</a>
+							  <a href="/teacher/work2/{{classroom.id}}" role="button" class="btn btn-outline-success">自訂作業</a>                
+							  <a href="/teacher/forum/{{classroom.id}}" role="button" class="btn btn-outline-success">討論區</a>  							  
+							  <a href="/teacher/survey/{{classroom.id}}" role="button" class="btn btn-outline-success">問卷區</a>  							  
+							  <a href="/teacher/survey/{{classroom.id}}" role="button" class="btn btn-outline-success">問卷區</a>  							  
+  <!--
+    <a href="/teacher/work/{{classroom.id}}" class="btn btn-primary" role="btn"><span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> 專題</a>
+-->  
+  </div>
+</div>
+  {% endfor %}
+    		{% load pagination %}
+        {% get_pagination %}  
+{% endblock %}

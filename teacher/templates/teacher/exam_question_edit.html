@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load tag %}
+
+{% block content %}
+<a href="" class="btn btn-success" role="btn">{{exam.title}}</a>
+<!--------------------------------------------------------->		
+{% if question.types == 2 %}
+選擇題
+<form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+  {% csrf_token %}
+  <input type=hidden name=types value="2">
+  <input type=hidden name=exam_id value={{exam.id}}>
+  <input type=hidden name=question_id value={{question.id}}>
+  <div class="form-group">
+    <label for="id_title" class="col-sm-2 control-label">題目</label>
+    <div class="col-sm-10">
+      <textarea name="title" id="id_title" rows="10" class="form-control">{{question.title}}</textarea>
+      <p class="form-group form-inline">
+          <label>　圖片：</label><input type="file" name="title_pic" class="form-control">                
+          </p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="id_option1" class="col-sm-2 control-label">選項1</label>
+    <div class="col-sm-10">
+      <input id="id_option1" maxlength="250" name="option1" type="text" class="form-control" value="{{question.option1}}" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="id_option2" class="col-sm-2 control-label">選項2</label>
+    <div class="col-sm-10">
+      <input id="id_option2" maxlength="250" name="option2" type="text" class="form-control" value="{{question.option2}}" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="id_option3" class="col-sm-2 control-label">選項3</label>
+    <div class="col-sm-10">
+      <input id="id_option3" maxlength="250" name="option3" type="text" class="form-control" value="{{question.option3}}" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="id_option4" class="col-sm-2 control-label">選項4</label>
+    <div class="col-sm-10">
+      <input id="id_option4" maxlength="250" name="option4" type="text" class="form-control" value="{{question.option4}}" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="id_answer" class="col-sm-2 control-label">答案</label>
+    <div class="col-sm-10">
+      <select id="id_answer" name="answer_select" class="form-control" title="Choose one of the following...">
+        <option {% if question.answer == 1 %}selected{% endif %} value=1>選項1</option>
+        <option {% if question.answer == 2 %}selected{% endif %} value=2>選項2</option>
+        <option {% if question.answer == 3 %}selected{% endif %} value=3>選項3</option>
+        <option {% if question.answer == 4 %}selected{% endif %} value=4>選項4</option>	 
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="id_score" class="col-sm-2 control-label">配分</label>
+    <div class="col-sm-10">
+      <input id="id_score" maxlength="250" name="score" type="number" class="form-control" value="{{question.score}}" />
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input type="submit" class="btn btn-default" value="送出" />
+    </div>
+  </div>
+</form>
+{% elif question.types == 1 %}  
+<form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+  {% csrf_token %}
+  <input type=hidden name=types value="1">
+  <input type=hidden name=exam_id value={{exam.id}}>
+  <input type=hidden name=question_id value={{question.id}}>
+  <div class="form-group">
+    <label for="title" class="col-sm-1 control-label">問題</label>
+    <div class="col-sm-10">
+        <textarea name="title" id="id_title" rows="10" class="form-control">{{question.title}}</textarea>
+        <p class="form-group form-inline">
+            <label>　圖片：</label><input type="file" name="title_pic" class="form-control">                
+            </p>
+      </div>
+  </div>
+  <div class="form-group">
+    <label for="radioBtn" class="col-sm-1 control-label">答案</label>
+    <div id="radioBtn" class="btn-group col-sm-10">
+      <a class="btn btn-primary btn-sm notActive" data-toggle="answer_tf" data-title="True" data-value="1">是</a>
+      <a class="btn btn-primary btn-sm active" data-toggle="answer_tf" data-title="False" data-value="0">否</a>
+      <input id="id_answer" maxlength="250" name="answer" type="hidden" class="form-control" value="{{question.answer}}">      
+    </div>
+  </div>
+  <div class="form-group">
+      <label for="id_score" class="col-sm-1 control-label">配分</label>
+      <div class="col-sm-10">
+        <input id="id_score" maxlength="250" name="score" type="number" class="form-control" value="{{question.score}}"/>
+      </div>
+    </div>              
+      <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input type="submit" class="btn btn-default" value="送出" />
+    </div>
+  </div>
+</form>
+{% elif question.types == 3 %}  
+<form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+  {% csrf_token %}
+  <input type=hidden name=types value="1">
+  <input type=hidden name=exam_id value={{exam.id}}>
+  <input type=hidden name=question_id value={{question.id}}>
+  <div class="form-group">
+    <label for="title" class="col-sm-1 control-label">問題</label>
+    <div class="col-sm-10">
+        <textarea name="title" id="id_title" rows="10" class="form-control">{{question.title}}</textarea>
+        <p class="form-group form-inline">
+            <label>　圖片：</label><input type="file" name="title_pic" class="form-control">                
+            </p>
+      </div>
+  </div>
+  <div class="form-group">
+      <label for="id_answer" class="col-sm-1 control-label">答案</label>
+      <div class="col-sm-10">
+          <input id="id_option1" maxlength="250" name="answer" type="text" class="form-control" value={{question.answer}}/>
+      </div>
+    </div>
+  <div class="form-group">
+      <label for="id_score" class="col-sm-1 control-label">配分</label>
+      <div class="col-sm-10">
+        <input id="id_score" maxlength="250" name="score" type="number" class="form-control" value="{{question.score}}"/>
+      </div>
+    </div>              
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input type="submit" class="btn btn-default" value="送出" />
+    </div>
+  </div>
+</form>
+{% elif question.types == 4 %}  
+<form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+  {% csrf_token %}
+  <input type=hidden name=types value="1">
+  <input type=hidden name=exam_id value={{exam.id}}>
+  <input type=hidden name=question_id value={{question.id}}>
+  <div class="form-group">
+    <label for="title" class="col-sm-1 control-label">問題</label>
+    <div class="col-sm-10">
+        <textarea name="title" id="id_title" rows="10" class="form-control">{{question.title}}</textarea>
+        <p class="form-group form-inline">
+            <label>　圖片：</label><input type="file" name="title_pic" class="form-control">                
+            </p>
+      </div>
+  </div>
+  <div class="form-group">
+      <label for="id_answer" class="col-sm-1 control-label">答案</label>
+      <div class="col-sm-10">
+          <textarea id="id_option1" rows="10" name="answer" type="text" class="form-control">{{question.answer}}</textarea>
+      </div>
+    </div>
+  <div class="form-group">
+      <label for="id_score" class="col-sm-1 control-label">配分</label>
+      <div class="col-sm-10">
+        <input id="id_score" maxlength="250" name="score" type="number" class="form-control" value="{{question.score}}"/>
+      </div>
+    </div>              
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input type="submit" class="btn btn-default" value="送出" />
+    </div>
+  </div>
+</form>
+{% endif %}
+<!--------------------------------------------------------->
+{% endblock %}
+
+{% block domready %}
+  $("#title").focus();
+
+  $('#radioBtn a').on('click', function(){
+    var sel = $(this).data('title');
+    var tog = $(this).data('toggle');
+    $('#'+tog).prop('value', sel);
+    $('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+    $('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+    $('#id_answer').val($(this).data('value'));
+  });
+
+  $('body').css('background-image','url(/static/images/back1.gif)');
+{% endblock %}

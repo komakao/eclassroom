@@ -1,0 +1,229 @@
+<SCRIPT language=JavaScript>
+  <!--
+  function MM_swapImgRestore() { //v3.0
+    var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+  }
+  function MM_preloadImages() { //v3.0
+    var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+      var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+      if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+  }
+  function MM_findObj(n, d) { //v3.0
+    var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+      d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+    if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+    for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+  }
+  function MM_swapImage() { //v3.0
+    var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+     if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+  }
+  //-->
+  </SCRIPT>
+
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+{% if subject_id == 2 %}
+    <div class="sectiontitle">
+      <h1 class="heading"> <i class="fa fa-universal-access" aria-hidden="true"></i> {{lesson_list.0.0}} </h6>
+    </div>
+    <hr>
+    <a href="https://studio.code.org/hoc/1" target="_blank">1小時學程式設計(Hour of Code)：經典迷宮</a>(Code.org製作)
+    <BR>  
+    <BR>
+    <div class="row">
+      {% for unit in lesson_list.0.1 %}
+      <div class="col-md-3">
+        <h4 class="nospace heading">{{unit.0}}({{unit.1|length}}) <i class="fa fa-hand-o-left" aria-hidden="true"></i> </h4>
+        <ul class="nospace">
+          {% for assignment in unit.1 %}
+					<li><a href="/student/lesson/2/{{forloop.parentloop.counter}}/{{assignment.2}}">{{assignment.0}}{% if assignment|last %}<img src="/static/images/done.png">{% endif %}</a></li>
+          {% endfor %}
+        </ul>
+        <p></p>
+      </div>
+      {% endfor %}    
+				{% if user.is_authenticated %}      
+      <div class="col-md-2">
+        <h4 class="nospace heading">問卷篇(2)</h4>
+        <ul class="nospace">
+          <li><a href="/survey/pre_survey/">課前問卷{% if request.user.id|pre_survey_done %}<img src="/static/images/done.png">{% endif %}</a></li>
+          <li><a href="/survey/post_survey/">課後問卷{% if request.user.id|post_survey_done %}<img src="/static/images/done.png">{% endif %}</a></li>          
+        </ul>
+      </div>      
+      {% endif %}
+    </div>
+    <hr>
+    <div class="row">
+    <div class="col-md-6"><!--本課程請搭配翰林版資訊科技課本使用<--></div>
+    <div class="col-md-6" align=right><a href="https://scratch.mit.edu/projects/editor/" target="_blank"><img src="/static/images/online.png"></a></div></p>
+    </div>
+  </div>
+{% elif subject_id == 3 %}
+    <div class="sectiontitle">
+      <h1 class="heading"> <i class="fa fa-universal-access" aria-hidden="true"></i> {{lesson_list.1.0}}</h6>
+    </div>
+    <hr>
+    <div class="row">
+      {% for unit in lesson_list.1.1 %}
+      <div class="col-md-3">
+        <h4 class="nospace heading">{{unit.0}}({{unit.1|length}}) <i class="fa fa-hand-o-left" aria-hidden="true"></i> </h4>
+        <ul class="nospace">
+          {% for assignment in unit.1 %}
+					<li><a href="/student/lesson/2/{{forloop.parentloop.counter}}/{{assignment.2}}">{{assignment.0}}{% if assignment|last %}<img src="/static/images/done.png">{% endif %}</a></li>
+          {% endfor %}
+        </ul>
+        <p></p>
+      </div>
+      {% endfor %}    
+    </div>
+    <hr>
+    <div class="row">
+    <div class="col-md-6"><!--本課程請搭配翰林版資訊科技課本使用<--></div>
+    <div class="col-md-6" align=right><a href="https://scratch.mit.edu/projects/editor/" target="_blank"><img src="/static/images/online2.png"></a></div></p>
+    </div>
+  </div>
+  {% elif subject_id == 1 %}
+    <img style="margin-left:20px; vertical-align:text-bottom" src="/static/images/scratch/banner.png"> 高慧君著 松崗出版
+
+		<table style="border:0px; width:900px;">
+		<tr>
+		<td>
+    {% if not user.is_authenticated %}
+		  <img name="menu01" src="/static/images/scratch/lesson01L.png">
+    {% else %}	     
+			<a onmouseover="MM_swapImage('menu01','','/static/images/scratch/lesson012.png',1);" onmouseout=MM_swapImgRestore() href="/student/lesson1/A001"><img name="menu01" src="/static/images/scratch/lesson01.png"></a>
+    {% endif %}
+      </td>
+		<td>
+ 		{% if not user|has_group:"teacher" and lock < 2 %}
+		  <img name="menu02" src="/static/images/scratch/lesson02L.png">
+    {% else %}	     
+   		<a onmouseover="MM_swapImage('menu02','','/static/images/scratch/lesson022.png',1);" onmouseout=MM_swapImgRestore() href="/student/lesson1/A002"><img name="menu02" src="/static/images/scratch/lesson02.png"></a>
+		{% endif %}
+      </td>
+		<td>
+ 		{% if not user|has_group:"teacher" and lock < 3 %}
+		  <img name="menu03" src="/static/images/scratch/lesson03L.png">
+    {% else %}	        
+			<a onmouseover="MM_swapImage('menu03','','/static/images/scratch/lesson032.png',1);" onmouseout=MM_swapImgRestore() href="/student/lesson1/A003"><img name="menu03" src="/static/images/scratch/lesson03.png"></a>
+    {% endif %}
+    </td>  
+		</td>
+    </tr>      
+    <tr>
+		<td>
+ 		{% if not user|has_group:"teacher" and lock < 5 %}
+		  <img name="menu04" src="/static/images/scratch/lesson04L.png">
+    {% else %}      
+			<a onmouseover="MM_swapImage('menu04','','/static/images/scratch/lesson042.png',1);" onmouseout=MM_swapImgRestore() href="/student/lesson1/A004"><img name="menu04" src="/static/images/scratch/lesson04.png"></a>
+    {% endif %}
+    <td>
+ 		{% if not user|has_group:"teacher" and lock < 7 %}
+		  <img name="menu05" src="/static/images/scratch/lesson05L.png">
+    {% else %}      
+			<a onmouseover="MM_swapImage('menu05','','/static/images/scratch/lesson052.png',1);" onmouseout=MM_swapImgRestore() href="/student/lesson1/A005"><img name="menu05" src="/static/images/scratch/lesson05.png"></a>
+    {% endif %}
+    </td>
+		<td>
+ 		{% if not user|has_group:"teacher" and lock < 9 %}
+		  <img name="menu06" src="/static/images/scratch/lesson06L.png">
+    {% else %}      
+			<a onmouseover="MM_swapImage('menu06','','/static/images/scratch/lesson062.png',1);" onmouseout=MM_swapImgRestore() href="/student/lesson1/A006"><img name="menu06" src="/static/images/scratch/lesson06.png"></a>
+		{% endif %}
+    </td>
+		</tr>
+		<tr>      
+		<td>
+ 		{% if not user|has_group:"teacher" and lock < 11 %}
+		  <img name="menu07" src="/static/images/scratch/lesson07L.png">
+    {% else %}
+			<a onmouseover="MM_swapImage('menu07','','/static/images/scratch/lesson072.png',1);" onmouseout=MM_swapImgRestore() href="/student/lesson1/A007"><img name="menu07" src="/static/images/scratch/lesson07.png"></a>
+		{% endif %}
+    </td>
+		<td>
+ 		{% if not user|has_group:"teacher" and lock < 13 %}
+		  <img name="menu08" src="/static/images/scratch/lesson08L.png">
+    {% else %}      
+			<a onmouseover="MM_swapImage('menu08','','/static/images/scratch/lesson082.png',1);" onmouseout=MM_swapImgRestore() href="/student/lesson1/A008"><img name="menu08" src="/static/images/scratch/lesson08.png"></a>
+		{% endif %}
+    </td>		
+		<td>
+    {% if not user|has_group:"teacher" and lock < 14 %}
+		  <img name="menu09" src="/static/images/scratch/lesson09L.png">
+    {% else %}     
+			<a onmouseover="MM_swapImage('menu09','','/static/images/scratch/lesson092.png',1);" onmouseout=MM_swapImgRestore() href="/student/lesson1/A009"><img name="menu09" src="/static/images/scratch/lesson09.png"></a>
+    {% endif %}
+    </td>
+		</tr>
+		<tr>      
+		<td>
+    {% if not user|has_group:"teacher" and lock < 14 %}
+		  <img name="menu10" src="/static/images/scratch/lesson093L.png">
+    {% else %}       
+			<a onmouseover="MM_swapImage('menu10','','/static/images/scratch/lesson094.png',1);" onmouseout=MM_swapImgRestore() href="/student/exam/"><img name="menu10" src="/static/images/scratch/lesson093.png"></a>
+		{% endif %}
+    </td>
+		<td>
+    {% if not user|has_group:"teacher" and lock < 15 %}
+		  <img name="menu11" src="/static/images/scratch/lesson10L.png">
+    {% else %}       
+			<a onmouseover="MM_swapImage('menu11','','/static/images/scratch/lesson102.png',1);" onmouseout=MM_swapImgRestore() href="/student/lesson1/A010"><img name="menu11" src="/static/images/scratch/lesson10.png"></a>
+		{% endif %}
+    </td>
+		<td>
+    {% if not user|has_group:"teacher" and lock < 16 %}
+		  <img name="menu12" src="/static/images/scratch/lesson11L.png">
+    {% else %}       
+			<a onmouseover="MM_swapImage('menu12','','/static/images/scratch/lesson112.png',1);" onmouseout=MM_swapImgRestore() href="/student/lesson1/A011"><img name="menu12" src="/static/images/scratch/lesson11.png"></a>
+	  {% endif %}
+    </td>		
+		</tr>
+	  	</table>
+<hr>
+<div class="row">
+<div class="col-md-4">
+  <h4 class="nospace heading">實戰入門(8) <i class="fa fa-hand-o-left" aria-hidden="true"></i></h4>
+  <ul class="nospace">
+    <li><a href="/student/lesson1/A101">A001:接雞蛋</a></li>
+    <li><a href="/student/lesson1/A102">A002:電流急急棒</a></li>  
+    <li><a href="/student/lesson1/A103">A003:打磚塊</a></li>
+    <li><a href="/student/lesson1/A104">A004:打蟑螂</a></li>  
+    <li><a href="/student/lesson1/A105">A005:猜數字</a></li>
+    <li><a href="/student/lesson1/A106">A006:射氣球</a></li>  
+    <li><a href="/student/lesson1/A107">A007:猴子吃香蕉</a></li>
+    <li><a href="/student/lesson1/A108">檢定:聖誕老公公送禮物</a></li>                      
+  </ul>
+</div>     
+
+<div class="col-md-4">
+  <h4 class="nospace heading">實戰進擊(8) <i class="fa fa-hand-o-left" aria-hidden="true"></i></h4>
+  <ul class="nospace">
+    <li><a href="/student/lesson1/A201">B001:小蜜蜂對抗戰</a></li>
+    <li><a href="/student/lesson1/A202">B002:貓貓大戰</a></li>  
+    <li><a href="/student/lesson1/A203">b003:夾娃娃</a></li>
+    <li><a href="/student/lesson1/A204">B004:小章魚快快游</a></li>  
+    <li><a href="/student/lesson1/A205">B005:緊急救援</a></li>
+    <li><a href="/student/lesson1/A206">B006:大魚吃小魚</a></li>  
+    <li><a href="/student/lesson1/A207">B007:猜拳</a></li>
+    <li><a href="/student/lesson1/A208">檢定:搶救貓咪</a></li>                      
+  </ul>
+</div>   
+
+<div class="col-md-4">
+  <h4 class="nospace heading">實戰高手(8) <i class="fa fa-hand-o-left" aria-hidden="true"></i></h4>
+  <ul class="nospace">
+    <li><a href="/student/lesson1/A301">C001:跳遠</a></li>
+    <li><a href="/student/lesson1/A302">C002:對對碰</a></li>  
+    <li><a href="/student/lesson1/A303">C003:水果盤</a></li>
+    <li><a href="/student/lesson1/A304">C004:簡易接龍</a></li>  
+    <li><a href="/student/lesson1/A305">C005:星際大戰</a></li>
+    <li><a href="/student/lesson1/A306">C006:貪食蛇</a></li>  
+    <li><a href="/student/lesson1/A307">C007:九宮拼圖</a></li>
+    <li><a href="/student/lesson1/A308">檢定:見縫插針</a></li>                      
+  </ul>
+</div>   
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+		<img class="img-fluid" src="/static/images/computer.png">
+<table class="table">
+<tr>
+    <td>訪客人次：<label>{{admin_profile.home_count}}</label>次</td>
+    <td>使用者登入次數：<label>{{admin_profile.visitor_count}}</label>次</td>	
+	<td>註冊使用者：<label>{{user_count}}</label>人</td>	
+</tr>
+<tr>
+	<td>教師人數：<label>{{teacher}}</label>人</td>
+    <td>學生人數：<label>{{student}}</label>人</td>	
+	<td>作品數目：<label>{{works}}個</label></td>	
+
+</tr>
+<tr>
+    <td>開課班次：<label>{{classroom_count}}班</label></td>
+	<td>資料庫記錄：共<label>{{row_count}}筆</label></td>	
+	<td>開站時間：<label>{{admin_profile.open_time}}</label></td>
+</tr>
+<tr>
+
+
+</tr>
+</table>
+	
+{% endblock %}

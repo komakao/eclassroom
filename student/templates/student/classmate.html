@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+    {% if request.user.id|teacher_classroom:classroom.id %}
+<a href="/teacher/student/join/{{classroom.id}}" role="btn" class="btn btn-info">加選學生</a>
+    {% endif %}
+<table class="table">
+  <tr>
+    {% if request.user.id|teacher_classroom:classroom.id %}
+      <th>帳號</th>
+	  <th>功能</th>
+	{% endif %}
+      <th>座號</th>    
+      <th>電腦</th>              
+      <th>姓名</th>
+	  <th>組別</th>
+      <th>最新登入</th>
+  </tr>
+{% for enroll in enroll_list %}
+  <tr>
+   {% if request.user.id|teacher_classroom:classroom.id %} 
+    <td>{{enroll.student.username}}</td>
+	<td>
+    <A href="/teacher/unenroll/{{enroll.id}}/{{enroll.classroom.id}}" onclick="return confirm('確定要刪除嗎?')" role="buuton" class="btn btn-outline-success">退選</a>
+    <a href="/account/password/{{enroll.student.id}}/{{classroom.id}}" role="buuton" class="btn btn-outline-success">密碼</a>
+	</td>
+	{% endif %}	
+    <td>{% if request.user.id|teacher_classroom:classroom.id %}<a href="/student/classroom/{{enroll.id}}/seat/">{{enroll.seat}}</a>{% else %}{{enroll.seat}}{% endif %}</td>
+    <td>{% if request.user.id|teacher_classroom:classroom.id %}<a href="/student/classroom/{{enroll.id}}/computer/">{{enroll.computer}}</a>{% else %}{{enroll.computer}}{% endif %}</td>
+    <td nowrap><img src="/static/avatar/s{{ enroll.student.profile.avatar }}.png"> {% if request.user.id|teacher_classroom:classroom.id %}<a href="/account/nickname/{{enroll.student_id}}/{{classroom.id}}">{{enroll.student_id|nickname}}</a>{% else %}{{enroll.student_id|nickname}}{% endif %}</td>
+	{% if enroll.group == -1 or enroll.group >= classroom.group_number %}
+	<td>尚未分組</td>
+	{% else %}
+	<td>第{{enroll.group|add:1}}組</td>
+	{% endif %}
+    <td>{{enroll.student.last_login}}</td>
+  </tr>
+{% endfor %}
+</table>
+{% endblock %}

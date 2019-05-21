@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block header %}
+<link href="/static/css/checkbox.css" rel="stylesheet" type="text/css" media="all">
+{% endblock %}
+{% block content %}
+         <form action="" enctype="multipart/form-data"  method="post">
+            <table class="table">
+             
+<tr><th nowrap>班級:</th><Td>
+              {% for classroom in classrooms %}
+  <label for="classroom{{forloop.counter}}" class="customcheck">{{classroom.name}}
+           <input {% if classroom.id == classroom_id %}checked="checked"{% endif %} value="{{classroom.id}}" name="classrooms" type="checkbox" id="classroom{{forloop.counter}}" class="checkmark">
+           <span class="checkmark"></span>
+        </label> 
+              {% endfor %}
+  </TD></tr>
+            <tr><th><label for="id_title">討論主題:</label></th><td><input class="form-control list-group-item-text" id="id_title" maxlength="250" name="title" type="text" value="{{fwork.title}}"/>
+  </table>
+           
+            {% csrf_token %}
+            <input type="submit" value="送出">
+        </form>
+{% endblock %}

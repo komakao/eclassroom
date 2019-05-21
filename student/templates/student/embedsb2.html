@@ -1,0 +1,18 @@
+<script type="text/javascript" src="/static/sb2/swfobject.js"></script>
+<script >   
+var flashvars = {
+project: "/static/work/{{request.user.id}}/{{workfiles.0.filename}}" ,
+autostart: "false"
+};
+var params = {
+bgcolor: "#FFFFFF",
+allowScriptAccess: "always",
+allowFullScreen: "true",
+wmode: "window",
+menu:"‘false"
+};
+var attributes = {};
+swfobject.embedSWF("/static/sb2/Scratch.swf", "flashContent", "482", "387", "10.2.0","expressInstall.swf", flashvars, params, attributes);
+</script>
+<div id="flashContent" >
+</div> 

@@ -1,0 +1,67 @@
+﻿{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+<table>
+  <tr>
+  <Td>
+<a href="/account/user/0" role="button" class="btn btn{% if group == 1 and not account.strip %}-outline{% endif %}-info">所有帳號</a>
+<a href="/account/user/1" role="button" class="btn btn{% if group == 0 and not account.strip %}-outline{% endif %}-info ">註冊帳號</a>  
+  </Td>
+    <td>
+<form action=""  method="get">
+ <label class="form-group form-inline">搜尋帳號：<input type="text" name = "account"><input type="submit" value="送出"/></label>    
+    </form>
+    </td>
+  </tr>
+</table>
+<table class="table">
+  <tr>
+  <th>帳號</th>    
+  <th>暱稱</th>   
+  <th>功能</th>      
+  </tr>
+{% for user in user_list %}
+  <tr>
+  <td>{{user.username}}</td>       
+  <td>{{user.first_name}}</td>       
+  <td>
+  {% if user|has_group:"teacher" %}<a href="#" data-userid="{{ user.id }}" data-action="unset" class="teacher btn btn-success" role="button">取消教師</a>{% else %}<a href="#" data-userid="{{ user.id }}" data-action="set" class="teacher btn btn-outline-success" role="button">設為教師</a>{% endif %}
+  <a href="/account/user/{{user.id}}/update/" class="btn btn-outline-success" role="button">修改</a>
+  <a href="/account/user/{{user.id}}/password/" class="btn btn-outline-success" role="button"">密碼</a>
+  </td>
+  </tr>
+{% endfor %}
+</table>
+    {% load pagination %}
+    {% get_pagination %}
+{% endblock %}
+
+{% block domready %}
+  $('a.teacher').click(function(e){
+    var launcher = this;  
+    e.preventDefault();
+    $.post('/account/teacher/make/',
+      {
+        userid: $(launcher).data('userid'),
+        action: $(launcher).data('action')
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          var previous_action = $(launcher).data('action');
+		      if (previous_action == 'set') {
+               $(launcher).removeClass("btn-outline-success").addClass("btn-success");
+               $(launcher).html("取消教師");
+               $(launcher).data('action', 'unset');
+           } else {
+               $(launcher).removeClass("btn-success").addClass("btn-outline-success");
+               $(launcher).html("設為教師");
+               $(launcher).data('action', 'set');               
+           }
+        } else {
+			   	alert("hello");
+	    	}
+      }
+    );
+  });
+{% endblock %}

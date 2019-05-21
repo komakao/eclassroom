@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load tz %}
+{% block title %} Teachers {% endblock %}
+{% block content %}
+        班級名稱：{{ classroom_name }}<BR>
+        {% if lesson == 1 %}
+        <table class="table">
+        <tr>   
+            <td>姓名</td>
+            <td>指定作業</td>			
+            <td>自訂作業</td>
+			</tr>
+        {% for enroll in enrolls %}
+            <tr>
+						<td>{{enroll.seat}}){{enroll.student.first_name}}</td>	
+            <td><a href="/teacher/check/0/1/{{enroll.student_id}}/{{enroll.classroom_id}}">批閱心得(全:{{enroll.score_memo0}}--上:{{enroll.score_memo1}}--下:{{enroll.score_memo2}})</a></td>
+            <td><a href="/teacher/check/1/1/{{enroll.student_id}}/{{enroll.classroom_id}}">批閱心得(全:{{enroll.score_memo0_custom}}--上:{{enroll.score_memo1_custom}}--下:{{enroll.score_memo2_custom}})</a></td>
+            </tr>
+        {% endfor %}
+        </table>
+
+        {% else %}
+          1234
+        {% endif %}
+{% endblock %}

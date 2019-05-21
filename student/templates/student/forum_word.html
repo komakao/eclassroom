@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+{{classroom.name}}的心得詞句：<font color=blue>{{word}}</font>
+      {% for work, seat in datas %}
+  <div class="card">
+  <div class="card-header">
+  {{seat}}){{work.student_id|realname}}
+  </div>
+  <div class="card-body">
+   {{work.memo|memo|safe}}
+  </div>
+</div>
+
+      {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block header %}
+<style>
+#radioBtn .notActive{
+    color: #3276b1;
+    background-color: #fff;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+         <form action="" enctype="multipart/form-data"  method="post">
+            <table class="table">
+                <tr><th><label for="id_title">分組名稱:</label></th><td><input class="form-control list-group-item-text" id="id_title" maxlength="250" name="title" type="text" /></td></tr>
+<tr><th><label for="id_numbers">分組數目:</label></th><td><input class="form-control list-group-item-text" id="id_numbers" name="numbers" type="number" value="6" /></td></tr>
+<tr><th><label for="id_assign">分組方式:</label></th><td>
+      			<div class="input-group">
+    				<div id="radioBtn" class="btn-group">
+                <a class="btn btn-primary btn-sm active" data-toggle="assign" data-title="0">自訂分組</a>
+    					<a class="btn btn-primary btn-sm notActive" data-toggle="assign" data-title="1">隨機分組</a>
+    				<input type="hidden" name="assign" id="id_assign" value="0">
+              </div></div>
+  </td></tr>        
+                </td>
+              </tr>
+<tr>
+<td>
+  </td>
+<td>
+              <input type="submit" value="送出"></td></tr>
+            </table>
+            {% csrf_token %}
+
+        </form>
+{% endblock %}
+           
+{% block domready %}
+$('#radioBtn a').on('click', function(){
+    var sel = $(this).data('title');
+    var tog = $(this).data('toggle');
+    $('#id_assign').prop('value', sel);
+    
+    $('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+    $('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+})     
+
+$("#id_title").focus();
+           
+{% endblock %}

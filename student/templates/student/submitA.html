@@ -1,0 +1,80 @@
+{% load tag %}
+{% block content %}
+<script type="text/javascript">
+function checkvalue(a, index) { 
+    var mystring = document.getElementById('id_memo'+index).value; 
+    if(!mystring.match(/\S/)) {
+        alert ('請填寫心得~~');
+        return false;
+    } else {
+        return true;
+    }
+}
+$(function () {
+    $('input[type=file][name="file"]').change(function () {
+        var val = $(this).val().toLowerCase(),
+            regex = new RegExp("(.*?)\.(sb3)$");
+        if (!(regex.test(val))) {
+            $(this).val('');
+            alert('您的檔案格式錯誤，只能上傳Scratch作品(.sb3)');
+        }
+    });
+});  
+</script>
+            <form action="/student/work/submit/{% if typing == "0" %}0{% else %}1{% endif %}/{% if 'A' in lesson %}1{% else %}{{lesson}}{% endif %}/{{index}}/" method="post" enctype="multipart/form-data" onsubmit="return checkvalue(this, {{index}});">      
+              <input type="hidden" name="lesson" value={{lesson}}>             
+              <table class="table">            
+        {% if not work_dict|hash_memo:index %}                      
+            <tr><td>狀態</td><td>尚未繳交</td></tr>
+        {% else %}
+            {% if work_dict|hash_score:index > 0 %}
+              <tr><Td>分數</td><td>{{ work_dict|hash_score:index }} /  評分者：{{ work_dict|hash_scorer:index|nickname }}</Td></tr>           
+            {% else %}
+            <tr><td>分數</td><td>尚未評分</td></tr>                                   
+            {% endif %}              
+        {% endif %}
+        {% if not work_dict|hash_score:index > 0 %}      
+            <tr><td>作品檔案</td><td><input id="id_file" name="file" type="file" class="form-control"></td></tr>
+            <tr><td valign="top"><lable id="result">心得感想</lable></td><td><textarea cols="20" id="id_memo{{index}}" name="memo" rows="5"  class="form-control">{{ work_dict|hash_memo:index }}</textarea></td></tr>              
+            <tr><td></td><td><input type="submit" value="送出"  class="form-control btn-info"/></td></tr>
+        {% endif %}         
+              </table>
+      {% csrf_token %}   
+            </form>
+
+{% if work_dict|hash_memo:index %}
+
+{% endif %}
+        {% with workfiles=work_dict|hash_files:index %}
+
+        {% for workfile in workfiles %}		
+              <BR>第{{workfiles|length|subtract:forloop.counter|add:1}}版：<A href="/student/work/download/{{typing}}/{{lesson_id}}/{{index}}/{{request.user.id}}/{{workfile.id}}">{{workfile.upload_date}}</A>
+        {% endfor %}
+        {% endwith %}
+{% endblock %}
+
+{% block footer_script %}
+<script>
+function wordCount( val ){
+    var clean_message = val.replace(/\[m_\d+#\d+:\d+:\d+\]/g, '');
+    var chinese = clean_message.match(/[\u4E00-\u9FA5]/g);
+    var pure_english = clean_message.replace(/[\u4E00-\u9FA5]/g, '')
+    var wom = pure_english.match(/\w+/g);
+    return {
+      words : wom ? wom.length : 0,
+      chars : chinese ? chinese.length : 0,
+		};
+}
+$('#id_memo').on('input', function(e){
+    var v = wordCount(e.target.value);
+    if ($(this).val().length > 1000) {
+      // Split the string on first 200 words and rejoin on spaces
+      alert("心得最多只能輸入1000個字元")
+      $(this).val(e.target.value.substring(0, 1000));
+    }
+    else {
+  $('#result').html("心得感想：(英:" + v.words + " / 中: " + v.chars + ")");
+    }
+});
+</script>
+{% endblock %}

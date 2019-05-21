@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+         <form action="" enctype="multipart/form-data"  method="post">
+        <input type=hidden name=forum_id value={{forum_id}}>   
+        <input type=hidden name=content_id value={{content_id}}>             
+           <table class="table">
+   
+             <tr><td>類別</td><td><input type=text name=kind value={{content.kind}}></td></tr>
+             <tr><td>顏色</td><td><input type=color name=color value={% if content.color %}{{content.color}}{% else %}#FFFF99{% endif %}></td></tr>
+
+            </table>
+            {% csrf_token %}
+            <input type="submit" value="送出">
+        </form>
+{% endblock %}
+	{% block domready %}
+	    $('body').css('background-image','url(/static/images/back3.gif)');
+	{% endblock %}	

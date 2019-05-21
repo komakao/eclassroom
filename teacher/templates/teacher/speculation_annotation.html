@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load tag %}
+
+{% block title %} Teachers {% endblock %}
+
+{% block content %}
+{{ types }}
+        <a href="/teacher/speculation/annotation/add/{{forum_id}}" class="btn btn-warning" role="btn"><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> 新增類別</a>
+<button type="button" class="btn btn-success">{{fwork.title}}</button>
+
+<div class="list-group">
+{% for work in contents %}
+  <div class="list-group-item">
+    <button class="btn btn-default" style="background-color: {{work.color}}">{{ work.kind }}</button>
+    <A href="/teacher/speculation/annotation/delete/{{forum_id}}/{{work.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
+    <a href="/teacher/speculation/annotation/edit/{{forum_id}}/{{work.id}}"><img src="/static/images/edit.gif"> 編輯</a>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}
+	{% block domready %}
+	    $('body').css('background-image','url(/static/images/back3.gif)');
+	{% endblock %}	

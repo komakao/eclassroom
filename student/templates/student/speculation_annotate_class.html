@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load tag %}
+
+{% block header %}
+<link rel="stylesheet" href="/static/js/annotator/annotator.min.css" type="text/css" media="all" />
+<script type="text/javascript" src="/static/js/annotator/annotator-full.min.js"></script>
+<link rel="stylesheet" href="/static/js/annotator/annotator.touch.css" type="text/css" media="all" />
+<script type="text/javascript" src="/static/js/annotator/annotator.touch.min.js"></script>
+<script type="text/javascript" src="/static/js/annotator/annotator.message.js"></script>
+<script type="text/javascript" src="/static/js/annotator/annotator.image.js"></script>
+<style type="text/css">{% for type in types %}
+  .annotator-hl.atype-{{type.id}} {background-color: {{type.color}}}{% endfor %}
+</style>
+{% endblock %}
+
+{% block content %}
+<button class="btn btn-success">{{swork.title}}</button> <button class="btn btn-success">{{classroom_id|classname}}</button><BR>
+{% for annotation in annotations %}
+  <a href="/student/speculation/annotateclass/{{classroom_id}}/{{index}}/{{annotation.id}}" class="btn {% if annotation.id == annotate_id %}btn-primary{% else %}btn-default{% endif %}">{{annotation.kind}}</a>
+{% endfor %}
+<ul class="list-group">{% for work in contents %}
+  {% include "student/module_speculation_material.html" with show_footer="1" %}
+{% endfor %}</ul>
+{% endblock %}
+
+{% block domready %}
+  // Annotation //
+  annotation_type = [];
+  {% for type in types %}
+    annotation_type['t{{ type.id }}'] = {'kind': '{{ type.kind }}', 'color': '{{ type.color }}'};
+  {% endfor %}
+
+  $('.memo-content').each(function(index, element) {
+    var mid = $(element).parent().parent().attr('id').slice(2);
+    $(element).annotator({readOnly: true})
+    .annotator('addPlugin', 'Store', {
+      prefix: '/annotate', 
+      loadFromSearch: {
+        'ftype': 1,
+        'findex': {{ index }}, 
+        'classroom': {{ classroom_id }},
+        'atype': {{ annotate_id }},
+        'mid': mid,
+      }
+    })
+    .annotator('addPlugin', 'Touch')
+    .annotator('addPlugin', 'Image', annotation_type)
+    .annotator('addPlugin', 'Message', annotation_type);
+  });
+  $('.btn-add-marker').prop('disabled', true);
+  //$('html, body').animate({scrollTop: $(''+$(location).attr('hash')).offset().top -100 }, 'slow');
+{% endblock %}

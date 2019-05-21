@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block header %}
+<style>
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    border: 0px solid #73AD21;	
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+</style>
+{% endblock %}
+{% block content %}
+{% if classroom.progress == 1 %}
+{% for group in classroomgroups %}
+<a href="/student/progress/{{typing}}/{{classroom.id}}/{{group.id}}" role="btn" class="btn btn-{% if not group.id == group_id %}outline-{% endif %}info">{{group.title}}</a>
+{% endfor %}
+{% endif %}
+<table class="table">
+        <tr>
+                <Td style="padding:2px"></Td>
+                {% for key, assignment in lesson_dict %}
+                <td style="padding:2px"><button type="button" class="btn-warning btn-circle">{{forloop.counter}}</button></td>                           
+                {% endfor %}
+            </tr>     		
+            <tr>			
+                <Td style="padding:2px"></Td>
+                {% for key, assignment in lesson_dict %}
+                    <td><font size=-2>{{assignment}}</font></td>            
+                {% endfor %}
+            </tr>
+
+	
+             {% for bar in bars %}
+                <tr>
+                <Td style="padding:2px" nowrap>{{bar.0.0.seat}}){{bar.0.0.student.first_name}}</td> 				
+                {% for enroll, work in bar %}
+                 				
+                <Td style="padding:2px;" nowrap>
+				{% if work %}
+				  {% if work.scorer > 0 %}
+				  <button type="button" class="btn-info btn-circle">{{work.score}}</button><BR><font size=-2>{{work.publication_date|date:"m/d"}}<BR>{{work.scorer|nickname}}</font>
+				  {% else %}
+                  <button type="button" class="btn-success btn-circle"></button><BR><font size=-2>{{work.publication_date|date:"m/d"}}</font>
+				  {% endif %}
+				{% else %}
+                <button type="button" class="btn-dark btn-circle">{{forloop.counter}}</button>				
+				{% endif %}
+                {% endfor %}
+				</td>
+            </tr>
+            {% endfor %}	
+
+        </table>
+
+{% endblock %}

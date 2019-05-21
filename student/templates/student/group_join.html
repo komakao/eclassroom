@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+<button class="btn btn-success">{{group.title}}</button>
+						{% if request.user|has_group:"teacher" %}
+               {% if group.opening %}<a href="/teacher/group/make2/{{group.id}}/0" data-groupid="{{ group.id }}" data-action="0" class="open btn btn-success" role="btn">進行分組中</a>{% else %}<a href="/teacher/group/make2/{{group.id}}/1" data-groupid="{{ group.id }}" data-action="1" class="open btn btn-outline-info" role="btn">分組已結束</a>{% endif %}
+            {% endif %}
+
+        <div class="row">
+          <table class="table">
+<tr>
+<TD>組別</td>
+<td>組長</td>
+{% if group.opening %}
+<td>功能</td>
+  {% endif %}
+<td>組員</td>
+  {% if group.opening %}
+<td>功能</td>
+  {% endif %}
+</tr>            
+         {% for number, members, leader in groups %}
+<tr>
+<td>第{{number|add:1}}組</td>   
+<td>{% if leader %}<button class="btn btn-info">{{leader.seat}}){{leader.student.first_name}}</button>{% endif %}</td>
+{% if group.opening %}
+<td>
+{% for member in members %}
+{% if member.student_id == request.user.id %}
+<a href="/student/group/leader/{{group_id}}/{{number}}/{{enroll_id}}" class="btn btn-outline-danger" role="btn">設為組長</a>
+{% endif %}
+{% endfor %}
+</td>
+{% endif %}
+<td>{% for member in members %}<button class="btn btn-info">{{member.seat}}){{member.student.first_name}}</button> {% endfor %}</td>
+{% if group.opening %}
+  {% if user_group == number %}
+  <td><button class="btn btn-success">已加入</button></td>
+  {% else %}
+  <td><a href="/student/group/add/{{group_id}}/{{number}}/{{enroll_id}}" class="btn btn-outline-danger" role="btn">加入此組</a></td>
+  {% endif %}
+{% endif %}
+</tr>
+  {% endfor %}
+
+            
+          </table>  
+尚未分組：          
+{% for seat, student in no_group %}
+({{seat}}){{student.first_name}}         
+{% endfor %}
+{% endblock %}
+          

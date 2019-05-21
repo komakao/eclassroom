@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load tag %}
+
+{% block content %}
+<a href="/student/classroom/join/1" class="btn btn-info">加入班級</a>
+{% for classroom in classroom_list %}
+          <a href="javascript:scroll({{classroom.id}})" role="btn" class="btn btn-outline-primary">{{classroom.name}}</a>
+          {% endfor %}
+<BR><BR>
+{% for classroom in classroom_list %}
+<div class="card" id="{{enroll.classroom.id}}">
+  <h5 class="card-header">{{classroom.name}} ({{classroom.lesson_choice}})：{{request.user.id|seat:classroom.id}}號</h5>
+  <div class="card-body" id={{classroom.id}}>
+    {% if not classroom.online and not classroom.teacher_id == request.user.id %}
+    課程已關閉
+    {% else %}
+    <p style="padding:0px; margin:2px;">
+基本資料：
+			<a href="/student/classroom/{{request.user.id|enroll:classroom.id}}/seat" role="button" class="btn btn-outline-success"><i class="fa fa-bell-o" aria-hidden="true"></i> 座號</a>
+			<a href="/student/classroom/{{request.user.id|enroll:classroom.id}}/computer" role="button" class="btn btn-outline-success"><i class="fa fa-bell-o" aria-hidden="true"></i> 電腦</a>
+			<a href="/student/group/{{classroom.id}}" role="button" class="btn btn-outline-success"><i class="fa fa-flag-o" aria-hidden="true"></i> 分組</a>
+			<a href="/student/classroom/{{classroom.id}}/classmate" role="button" class="btn btn-outline-success"> <i class="fa fa-flag-o" aria-hidden="true"></i> 同學</a>	  
+      <a href="/account/line/class/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-envelope-o" aria-hidden="true"></i> 私訊同學</a>	  
+	  <a href="/account/line/add/{{classroom.id}}/{{classroom.teacher_id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-envelope-o" aria-hidden="true"></i> 私訊老師</a>	  			
+	      </p>
+      <p style="padding:0px; margin:2px;">
+        課程活動：      
+        <a href="/student/announce/{{classroom.id}}/" role="button" class="btn btn-outline-success"> <i class="fa fa-bullhorn" aria-hidden="true"></i> 公告</a>	  
+        <a href="" role="button" class="btn btn-outline-warning"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 課程區</a>         
+      <a href="/student/forum/{{classroom.id}}/0" role="button" class="btn btn-outline-success"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 討論區</a>       
+      <a href="" role="button" class="btn btn-outline-warning"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 合作區</a>
+      <a href="" role="button" class="btn btn-outline-warning"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 註記區</a>         
+      <a href="/student/exam/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 測驗區</a>		            
+      <a href="/student/survey/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 問卷區</a>
+      <p style="padding:0px; margin:2px;">
+        {% if classroom.lesson > 0 %}  
+  程式設計：
+	        <a href="/student/work/0/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-heart-o" aria-hidden="true"></i> 指定作業</a>
+			<a href="/student/progress/0/{{classroom.id}}/0/" role="button" class="btn btn-outline-success"> <i class="fa fa-heart-o" aria-hidden="true"></i> 進度</a>
+            <a href="/student/memo/count/0/{{classroom.id}}/0" role="button" class="btn btn-outline-success"> <i class="fa fa-heart-o" aria-hidden="true"></i> 詞頻</a>    			
+	        <a href="/student/work/1/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-bookmark-o" aria-hidden="true"></i> 自訂作業</a>
+     	    <a href="/student/progress/1/{{classroom.id}}/0/" role="button" class="btn btn-outline-success"> <i class="fa fa-bookmark-o" aria-hidden="true"></i> 進度</a>
+            <a href="/student/memo/count/1/{{classroom.id}}/0" role="button" class="btn btn-outline-success"> <i class="fa fa-bookmark-o" aria-hidden="true"></i> 詞頻</a>    			
+           <a href="" role="button" class="btn btn-outline-warning"> <i class="fa fa-user-o" aria-hidden="true"></i> 創意秀</a> 		   
+      </p>
+      {% endif %}
+      {% endif %}
+  </div>
+</div>
+
+{% endfor %}
+    {% load pagination %}
+    {% get_pagination %}
+{% endblock %}
+  {% block footer_script %}
+  <script>
+    function scroll(element) {
+  // scrolls to the element with id='citation' 
+var node = document.getElementById(element);    
+node.scrollIntoView();
+      window.scrollBy(0, -120);
+    }
+  </script>
+  {% endblock %}

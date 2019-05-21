@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% load tag %}
+
+{% block content %}
+<a href="" class="btn btn-success" role="btn">{{exam.title}}</a>
+<section class="tab-content">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="nav-item"><a class="nav-link active" aria-control="tab1" data-toggle="tab" role="tab"  href="#tab1">是非題</a></li>
+    <li role="presentation" class="nav-item"><a class="nav-link" aria-cotrol="tab2" data-toggle="tab" role="tab"  href="#tab2">匯入是非題</a></li>
+    <li role="presentation" class="nav-item"><a class="nav-link" aria-control="tab3" data-toggle="tab" role="tab"  href="#tab3">選擇題</a></li>
+    <li role="presentation" class="nav-item"><a class="nav-link" aria-cotrol="tab4" data-toggle="tab" role="tab"  href="#tab4">匯入選擇題</a></li>
+    <li role="presentation" class="nav-item"><a class="nav-link" aria-control="tab5" data-toggle="tab" role="tab"  href="#tab5">填充題</a></li>
+    <li role="presentation" class="nav-item"><a class="nav-link" aria-control="tab6" data-toggle="tab" role="tab"  href="#tab6">匯入填充題</a></li>
+   </ul>
+  <section class="tab-content">
+        <!--------------------------------------------------------->
+        <article id="tab1" class="tab-pane container active" role="tabpanel">
+            <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+              {% csrf_token %}
+              <input type=hidden name=types value="1">
+              <input type=hidden name=exam_id value={{exam.id}}>
+              <div class="form-group">
+                <label for="title" class="col-sm-1 control-label">問題</label>
+                <div class="col-sm-10">
+                    <textarea name="title" id="id_title" rows="10" class="form-control"></textarea>
+                    <p class="form-group form-inline">
+                    <label>　圖片：</label><input type="file" name="title_pic" class="form-control">                
+                    </p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="radioBtn" class="col-sm-1 control-label">答案</label>
+                <div id="radioBtn" class="btn-group col-sm-10">
+                  <a class="btn btn-primary btn-sm notActive" data-toggle="answer_tf" data-title="True" data-value="1">是</a>
+                  <a class="btn btn-primary btn-sm active" data-toggle="answer_tf" data-title="False" data-value="0">否</a>
+                  <input id="id_answer" maxlength="250" name="answer" type="hidden" class="form-control" value="0">                      
+                </div>
+              </div>
+              <div class="form-group">
+                  <label for="id_score" class="col-sm-1 control-label">配分</label>
+                  <div class="col-sm-10">
+                    <input id="id_score" maxlength="250" name="score" type="number" class="form-control" />
+                  </div>
+                </div>              
+              <input type="hidden" name="answer_tf" id="answer_tf" value="False"/>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <input type="submit" class="btn btn-primary" value="送出" />
+                </div>
+              </div>
+            </form>
+          </article>
+    <!--------------------------------------------------------->
+    <article id="tab2" class="tab-pane container" role="tabpanel">
+        {% if form.errors %}
+        <p style="color: red;">
+          Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+        {% endif %}
+        <BR>
+        <p>
+          <a href="/static/files/exam1.xls" class="btn btn-primary" role="btn">是非題格式範本.xls</a>
+        </p>
+        <form action="/teacher/exam/import/upload/1/{{exam.id}}/" enctype="multipart/form-data" method="post" class="form-inline">
+          {% csrf_token %}
+          <input id="id_file" name="file" type="file" class="form-control" />
+          <input type="submit" class="btn btn-primary" value="上傳" />
+        </form>
+      </article>  
+    <!--------------------------------------------------------->
+    <article id="tab3" class="tab-pane container" role="tabpanel">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+        {% csrf_token %}
+        <input type=hidden name=types value="2">
+        <input type=hidden name=exam_id value={{exam.id}}>
+        <div class="form-group">
+            <label for="title" class="col-sm-1 control-label">問題</label>
+            <div class="col-sm-10">
+                <textarea name="title" id="id_title" rows="10" class="form-control"></textarea>
+                <p class="form-group form-inline">
+                <label>　圖片：</label><input type="file" name="title_pic" class="form-control">                
+                </p>
+            </div>
+          </div>
+        <div class="form-group">
+          <label for="id_option1" class="col-sm-2 control-label">選項1</label>
+          <div class="col-sm-10">
+            <input id="id_option1" maxlength="250" name="option1" type="text" class="form-control" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="id_option2" class="col-sm-2 control-label">選項2</label>
+          <div class="col-sm-10">
+            <input id="id_option2" maxlength="250" name="option2" type="text" class="form-control" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="id_option3" class="col-sm-2 control-label">選項3</label>
+          <div class="col-sm-10">
+            <input id="id_option3" maxlength="250" name="option3" type="text" class="form-control" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="id_option4" class="col-sm-2 control-label">選項4</label>
+          <div class="col-sm-10">
+            <input id="id_option4" maxlength="250" name="option4" type="text" class="form-control" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="id_answer" class="col-sm-1 control-label">答案</label>
+          <div class="col-sm-10">
+            <select id="id_answer" name="answer" class="form-control" title="Choose one of the following...">
+              <option selected disabled value="0">請選擇</option>
+              <option value="1">選項1</option>
+              <option value="2">選項2</option>
+              <option value="3">選項3</option>
+              <option value="4">選項4</option>	 
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="id_score" class="col-sm-1 control-label">配分</label>
+          <div class="col-sm-10">
+            <input id="id_score" maxlength="250" name="score" type="number" class="form-control" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <input type="submit" class="btn btn-primary" value="送出" />
+          </div>
+        </div>
+      </form>
+    </article>
+    <!--------------------------------------------------------->
+    <article id="tab4" class="tab-pane container" role="tabpanel">
+      {% if form.errors %}
+      <p style="color: red;">
+        Please correct the error{{ form.errors|pluralize }} below.
+      </p>
+      {% endif %}
+      <p>
+        <a href="/static/files/exam2.xls" class="btn btn-primary" role="btn">選擇題格式範本.xls</a>
+      </p>
+      <form action="/teacher/exam/import/upload/2/{{exam.id}}/" enctype="multipart/form-data" method="post" class="form-inline">
+        {% csrf_token %}
+        <input id="id_file" name="file" type="file" class="form-control" />
+        <input type="submit" class="btn btn-primary" value="上傳" />
+      </form>
+    </article>
+    <!--------------------------------------------------------->
+    <article id="tab5" class="tab-pane fade" role="tabpanel">
+        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+          {% csrf_token %}
+          <input type=hidden name=types value="3">
+          <input type=hidden name=exam_id value={{exam.id}}>
+          <div class="form-group">
+              <label for="title" class="col-sm-1 control-label">問題</label>
+              <div class="col-sm-10">
+                  <textarea name="title" id="id_title" rows="10" class="form-control"></textarea>
+                  <p class="form-group form-inline">
+                  <label>　圖片：</label><input type="file" name="title_pic" class="form-control">                
+                  </p>
+              </div>
+          </div>
+          <div class="form-group">
+            <label for="id_answer" class="col-sm-1 control-label">答案</label>
+            <div class="col-sm-10">
+                <input id="id_option1" maxlength="250" name="answer" type="text" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="id_score" class="col-sm-1 control-label">配分</label>
+            <div class="col-sm-10">
+              <input id="id_score" maxlength="250" name="score" type="number" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <input type="submit" class="btn btn-primary" value="送出" />
+            </div>
+          </div>
+        </form>
+      </article>
+      <!--------------------------------------------------------->
+      <article id="tab6" class="tab-pane container" role="tabpanel">
+        {% if form.errors %}
+        <p style="color: red;">
+          Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+        {% endif %}
+        <p>
+          <a href="/static/files/exam3.xls" class="btn btn-primary" role="btn">填充題格式範本.xls</a>
+        </p>
+        <form action="/teacher/exam/import/upload/3/{{exam.id}}/" enctype="multipart/form-data" method="post" class="form-inline">
+          {% csrf_token %}
+          <input id="id_file" name="file" type="file" class="form-control" />
+          <input type="submit" class="btn btn-primary" value="上傳" />
+        </form>
+      </article>
+      <!--------------------------------------------------------->
+
+      <article id="tab7" class="tab-pane fade" role="tabpanel">
+          <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+            {% csrf_token %}
+            <input type=hidden name=types value="4">
+            <input type=hidden name=exam_id value={{exam.id}}>
+            <div class="form-group">
+                <label for="title" class="col-sm-1 control-label">問題</label>
+                <div class="col-sm-10">
+                    <textarea name="title" id="id_title" rows="10" class="form-control"></textarea>
+                    <p class="form-group form-inline">
+                    <label>　圖片：</label><input type="file" name="title_pic" class="form-control">                
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+              <label for="id_answer" class="col-sm-1 control-label">答案</label>
+              <div class="col-sm-10">
+                  <textarea name="answer" id="answer" rows="10" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="id_score" class="col-sm-1 control-label">配分</label>
+              <div class="col-sm-10">
+                <input id="id_score" maxlength="250" name="score" type="number" class="form-control" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" class="btn btn-primary" value="送出" />
+              </div>
+            </div>
+          </form>
+        </article>    
+      <!--------------------------------------------------------->
+  </section>
+</section>
+{% endblock %}
+
+{% block domready %}
+  $("#title").focus();
+  $('#radioBtn a').on('click', function(){
+    var sel = $(this).data('title');
+    var tog = $(this).data('toggle');
+    $('#'+tog).prop('value', sel);
+    $('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+    $('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+    $('#id_answer').val($(this).data('value'));    
+  });
+  $('body').css('background-image','url(/static/images/back1.gif)');
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}
+<table class="table">
+<tr>
+<th>正解</th>
+<th>{{q_answer}}</th>
+<th></th>
+</tr>
+{% for answer in answers %}
+<tr>
+<TD>{{answer.student_id|realname}}</TD>
+<td>{{answer.answer}}</td>
+<td>
+<a data-questionid="{{question_id}}" data-userid="{{answer.student_id}}" data-action="set" data-examworkid="{{answer.examwork_id}}" class="answer btn btn-{% if answer.answer_right or q_answer == answer.answer %}success{% else %}default{% endif %}" role="btn">正確</a>
+<a data-questionid="{{question_id}}" data-userid="{{answer.student_id}}" data-action="unset" data-examworkid="{{answer.examwork_id}}" class="answer btn btn-{% if answer.answer_right or q_answer == answer.answer %}default{% else %}success{% endif %}" role="btn">錯誤</a>
+</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
+{% block domready %}
+  $('a.answer').click(function(e){
+    var launcher = this;  
+    e.preventDefault();
+    $.post('/teacher/exam/check/make/',
+      {
+        userid: $(launcher).data('userid'),
+        action: $(launcher).data('action'),
+        examworkid: $(launcher).data('examworkid'),
+        questionid: $(launcher).data('questionid'),        
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          var previous_action = $(launcher).data('action');
+		      if (previous_action == 'set') {
+               $(launcher).removeClass("btn-default").addClass("btn-success active");
+               $(launcher).next().removeClass("btn-success active").addClass("btn-default");               
+           } else {  
+               $(launcher).removeClass("btn-default").addClass("btn-success active");  
+               $(launcher).prev().removeClass("btn-success active").addClass("btn-default");
+           }
+        } else {
+          alert(data['status']);
+	    	}
+      }
+    );
+  });
+
+  $('body').css('background-image','url(/static/images/back1.gif)'); 
+{% endblock %}

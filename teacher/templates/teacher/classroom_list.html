@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block header %}
+<style>
+.card-header {
+    background-color: #eeffee;
+}
+</style>
+{% endblock %}
+{% block content %}
+<a href="/teacher/classroom/create" class="btn btn-info">新增班級</a>
+<a href="/teacher/student/list" class="btn btn-info">學生帳號</a>
+          {% for classroom in classroom_list %}
+          <a href="javascript:scroll({{classroom.id}})" role="btn" class="btn btn-outline-primary">{{classroom.name}}</a>
+          {% endfor %}
+<BR>
+  <BR>
+{% for classroom in classroom_list %}
+<div class="card" id="{{classroom.id}}">
+  <h5 class="card-header">{{classroom.name}} ({{classroom.lesson_choice}})：{{classroom.password}}</h5>
+  <div class="card-body" id={{classroom.id}}>
+    <p style="padding:0px; margin:2px;">基本資料：
+                <a href="/teacher/classroom/{{classroom.id}}/update" role="button" class="btn btn-outline-success"> <i class="fa fa-lightbulb-o" aria-hidden="true"></i> 修改</a>
+                <a href="/student/classroom/{{classroom.id}}/classmate" role="button" class="btn btn-outline-success"> <i class="fa fa-meh-o" aria-hidden="true"></i> 學生</a>
+                <a href="/teacher/classroom/assistant/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-meh-o" aria-hidden="true"></i> 助教</a>                
+                <a href="/teacher/group/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-star-o" aria-hidden="true"></i> 分組</a>			
+                <a href="/account/line/class/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-envelope-o" aria-hidden="true"></i> 私訊同學</a>	                 
+                <a href="/teacher/announce/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-bullhorn" aria-hidden="true"></i> 公告</a>  
+			
+               </p>
+               <p style="padding:0px; margin:2px;">課程活動：
+                <a href="/teacher/forum/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 討論區</a>   
+                <a href="/teacher/exam/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 測驗區</a>   		
+                <a href="/teacher/survey/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 問卷區</a>                              
+                <!--
+                <a href="" role="button" class="btn btn-outline-warning"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 課程區</a>                 
+                -->
+                <a href="/teacher/team/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 合作區</a>                                       				
+                <a href="/teacher/speculation/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 註記區</a>   
+              </p>  
+        {% if classroom.lesson > 0 %}                   
+              <p style="padding:0px; margin:2px;">程式設計：
+				<a href="/teacher/work/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-heart-o" aria-hidden="true"></i> 指定作業</a>
+				<a href="/teacher/work/assistant/0/{{classroom.id}}/" role="button" class="btn btn-outline-success"> <i class="fa fa-heart-o" aria-hidden="true"></i> 小老師</a>				
+				<a href="/teacher/work2/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-bookmark-o" aria-hidden="true"></i> 自訂作業</a> 
+        <a href="/teacher/work/assistant/1/{{classroom.id}}/" role="button" class="btn btn-outline-success"> <i class="fa fa-bookmark-o" aria-hidden="true"></i> 小老師</a>	       
+        <a href="" role="button" class="btn btn-outline-warning"> <i class="fa fa-user-o" aria-hidden="true"></i> 創意秀</a>					        
+				<a href="/teacher/memo/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hourglass-o" aria-hidden="true"></i> 心得</a>						  			
+				<a href="/teacher/grade/0/1/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hourglass-o" aria-hidden="true"></i> 成績</a>  
+      </p>       	
+        {% endif %}              
+  </div>
+  </div>
+{% endfor %}
+    {% load pagination %}
+    {% get_pagination %}
+{% endblock %}
+  {% block footer_script %}
+  <script>
+    function scroll(element) {
+  // scrolls to the element with id='citation' 
+var node = document.getElementById(element);    
+node.scrollIntoView();
+      window.scrollBy(0, -70);
+    }
+  </script>
+  {% endblock %}

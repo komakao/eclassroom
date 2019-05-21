@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block header %}
+<style>
+#radioBtn .notActive{
+    color: #3276b1;
+    background-color: #fff;
+}
+</style>
+{% endblock %}
+{% block content %}
+        <div class="form-group">
+        	<label for="fun" class="col-sm-4 col-md-4 control-label text-right">測驗次數</label>
+    		<div class="col-sm-7 col-md-7">
+    			<div class="input-group">
+    				<div id="radioBtn" class="btn-group">
+    					<a class="btn btn-primary btn-sm {% if examclass.round_limit == 1 %}active{% else %}notActive{% endif %}" data-toggle="fun" data-title="1" data-examid="{{examclass.exam_id}}" data-classroomid="{{examclass.classroom_id}}">1次</a>
+              <a class="btn btn-primary btn-sm {% if examclass.round_limit == 2 %}active{% else %}notActive{% endif %}" data-toggle="fun" data-title="2" data-examid="{{examclass.exam_id}}" data-classroomid="{{examclass.classroom_id}}">2次</a>
+    					<a class="btn btn-primary btn-sm {% if examclass.round_limit == 3 %}active{% else %}notActive{% endif %}" data-toggle="fun" data-title="3" data-examid="{{examclass.exam_id}}" data-classroomid="{{examclass.classroom_id}}">3次</a>
+              <a class="btn btn-primary btn-sm {% if examclass.round_limit == 4 %}active{% else %}notActive{% endif %}" data-toggle="fun" data-title="4" data-examid="{{examclass.exam_id}}" data-classroomid="{{examclass.classroom_id}}">4次</a>
+    					<a class="btn btn-primary btn-sm {% if examclass.round_limit == 5 %}active{% else %}notActive{% endif %}" data-toggle="fun" data-title="5" data-examid="{{examclass.exam_id}}" data-classroomid="{{examclass.classroom_id}}">5次</a>   
+    					<a class="btn btn-primary btn-sm {% if examclass.round_limit == 0 %}active{% else %}notActive{% endif %}" data-toggle="fun" data-title="0" data-examid="{{examclass.exam_id}}" data-classroomid="{{examclass.classroom_id}}">無限次</a>                        
+    				</div>
+    				<input type="hidden" name="fun" id="fun">
+    			</div>
+    		</div>
+    	</div>
+	</div>
+	{% endblock %}
+	
+	{% block domready %}
+$('#radioBtn a').on('click', function(e){
+    var launcher = this;  
+    var sel = $(this).data('title');
+    var tog = $(this).data('toggle');
+    e.preventDefault();
+
+    $.post('/teacher/exam/round/set/',
+      {
+        examid: $(launcher).data('examid'),
+        classroomid: $(launcher).data('classroomid'),
+        round_limit : $(launcher).data('title'),
+      },
+      function(data){
+          if (data['status'] == 'ok') {
+              //alert('hi');
+              //$(launcher).prop("checked", true);
+          } else {
+              //alert(data['status'] );
+              //$(launcher).prop("checked", false);
+          }
+
+      }
+    );
+
+    $('#'+tog).prop('value', sel);
+    
+    $('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+    $('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+});
+	    $('body').css('background-image','url(/static/images/back1.gif)');
+	{% endblock %}
+	
