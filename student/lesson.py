@@ -8,7 +8,7 @@ def reset():
     lesson_list[0][1][0][1].append(['教材：貓狗對話', False, 1, 199354464, False, "QLLSbcR8LYc"])
     lesson_list[0][1][0][1].append(['習作：勇者鬥惡龍', False, 2, 199356271, False, False])    
     lesson_list[0][1].append(['計算篇', []])
-    lesson_list[0][1][1][1].append(['教材：求平均數', False, 3, 201792802, ["流程圖", "2_1.png"], False])          
+    lesson_list[0][1][1][1].append(['教材：求平均數', False, 3, 201792802, ["流程圖", "2_1.png"], "kiYf5-WZCY0"])          
     lesson_list[0][1][1][1].append(['教材：成績計算', False, 4, 201793143, ["流程圖", "2_2.png"], False])     
     lesson_list[0][1][1][1].append(['教材：累加計算', False, 5, 201793794, ["流程圖", "2_3.png"], False])    
     lesson_list[0][1][1][1].append(['教材：累乘計算', False, 6, 201794048, ["流程圖", "2_4.png"], False])  

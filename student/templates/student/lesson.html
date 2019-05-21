@@ -8,10 +8,10 @@
 <section class="wrapper">
   <ul class="nav nav-tabs" role="tablist">
     {% if user.is_authenticated %}
-    {% if lesson == 2 and unit == 1 %}
+    {% if lesson == 2 and index == 1 %}
     <li role="presentation" class="nav-item"><a aria-control="tab0" data-toggle="tab" role="tab" href="#tab0" class="nav-link active">基本環境介紹</a></li>    
     {% endif %}
-    <li role="presentation" class="nav-item"><a aria-control="tab1" data-toggle="tab" role="tab" href="#tab1" class="nav-link">範例展示</a></li>
+    <li role="presentation" class="nav-item"><a aria-control="tab1" data-toggle="tab" role="tab" href="#tab1" class="nav-link {% if not index == 1%}active{% endif %}">範例展示</a></li>
 		{% if lesson|lesson_download:index %}
     <li role="presentation" class="nav-item"><a aria-control="tab2" data-toggle="tab" role="tab" href="#tab2" class="nav-link">素材下載</a></li>    
     {% endif %}
@@ -27,13 +27,15 @@
   </ul>
 <div class="tab-content" id="myTabContent">
 
-      {% if user.is_authenticated %}			
+      {% if user.is_authenticated %}		
+      {% if lesson == 2 and index == 1 %}	
       <div class="tab-pane fade show active" id="tab0" role="tabpanel" aria-labelledby="tab0">
           <BR>
           <iframe width="560" height="315" src="https://www.youtube.com/embed/JuoWVXwklGM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>        
       </div>
+      {% endif %}
      <!--------------------------------------------------------->
-  <div class="tab-pane fade show" id="tab1" role="tabpanel" aria-labelledby="tab1">			
+  <div class="tab-pane fade show {% if not index == 1 %}active{% endif %}" id="tab1" role="tabpanel" aria-labelledby="tab1">			
 		<BR>
 			<iframe allowtransparency="true" width="485" height="402" src="http://scratch.mit.edu/projects/embed/{{assignment.0.3}}/?autostart=false" frameborder=“0” allowfullscreen></iframe>			
 		</div>
