@@ -2177,7 +2177,7 @@ class TeamContentListView(ListView):
     context_object_name = 'contents'
     template_name = "student/team_content.html"		
     def get_queryset(self):
-        if self.kwargs['grouping'] == "0":
+        if self.kwargs['grouping'] == 0:
             group_id = 0
         else:
             enroll_id = Enroll.objects.get(student_id=self.request.user.id, classroom_id=self.kwargs['classroom_id']).id
@@ -2190,7 +2190,7 @@ class TeamContentListView(ListView):
                 student_id = Enroll.objects.get(id=enroll.enroll_id).student_id
                 user_ids.append(student_id)
         else:
-            if self.kwargs['stage'] != "0":
+            if self.kwargs['stage'] != 0:
                 try:
                     enroll = Enroll.objects.get(id=self.kwargs['stage'])
                     user_ids.append(enroll.student_id)
@@ -2198,7 +2198,7 @@ class TeamContentListView(ListView):
                     pass
             else:
                 user_ids.append(self.request.user.id)       
-        if publish == "0":
+        if publish == 0:
             queryset = TeamContent.objects.filter(team_id=self.kwargs['team_id'], user_id__in=user_ids).order_by("-id")
         else :
             queryset = TeamContent.objects.filter(team_id=self.kwargs['team_id'], user_id__in=user_ids, publish=True).order_by("-id")          
@@ -2211,7 +2211,7 @@ class TeamContentListView(ListView):
         context['team_id'] = self.kwargs['team_id']
         context['grouping'] = self.kwargs['grouping']
         context['classroom_id'] = self.kwargs['classroom_id']
-        if self.kwargs['grouping'] == "0":
+        if self.kwargs['grouping'] == 0:
             group_id = 0
         else :
             group_id = TeamClass.objects.get(team_id=self.kwargs['team_id'], classroom_id=self.kwargs['classroom_id']).group
@@ -2261,7 +2261,7 @@ class TeamContentCreateView(CreateView):
         work.user_id = self.request.user.id
         work.save()         
   
-        return redirect("/student/team/content/"+self.kwargs['classroom_id']+"/"+self.kwargs['grouping']+"/"+self.kwargs['team_id']+"/0/0")  
+        return redirect("/student/team/content/"+str(self.kwargs['classroom_id'])+"/"+str(self.kwargs['grouping'])+"/"+str(self.kwargs['team_id'])+"/0/0")  
 
     def get_context_data(self, **kwargs):
         ctx = super(TeamContentCreateView, self).get_context_data(**kwargs)

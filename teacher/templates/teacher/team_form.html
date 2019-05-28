@@ -23,9 +23,12 @@
               </tr>
             -->
 <tr><th nowrap>班級:</th><Td>
-              {% for classroom in classrooms %}
-             <label for="class{{forloop.counter}}" class="btn btn-danger">{{classroom.name}}<input  {% if classroom.id == classroom_id %}checked{% endif %} value="{{classroom.id}}" name="classrooms" type="checkbox" id="class{{forloop.counter}}" class="badgebox" value="{{classroom.id}}}"><span class="badge">&check;</span></label>
-              {% endfor %}
+  {% for classroom in classrooms %}
+  <label class="customcheck">{{classroom.name}}
+      <input value="{{classroom.id}}" name="classrooms" type="checkbox" {% if classroom.id == classroom_id %}checked="checked"{% endif %}>
+      <span class="checkmark"></span>
+    </label>
+          {% endfor %}
   </TD></tr>
             <tr><th><label for="id_title">任務主題:</label></th><td><input class="form-control list-group-item-text" id="id_title" maxlength="250" name="title" type="text" />
   </table>
@@ -35,6 +38,3 @@
         </form>
 {% endblock %}
 
-	{% block domready %}
-	    $('body').css('background-image','url(/static/images/back1.gif)');
-	{% endblock %}

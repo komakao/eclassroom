@@ -4,15 +4,15 @@
 <button class="btn btn-success">{{classroom_id|classname}}</button>
 {% for team, group in teams %}
 <h2 id="{{work.id}}"></h2>
-<div class="panel panel-default">
-	<div class="panel-heading">{{team.title}}</div>
-  <div class="panel-body">
+<div class="card card-default">
+	<div class="card-header">{{team.title}}</div>
+  <div class="card-body">
 {% if group == 0 %}
 <button class="btn btn-default active"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 不分組</button>
 {% else %}
-<a href="/student/group/list/{{group}}" class="btn btn-default" role="btn"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分組</a>	
+<a href="/student/group/list/{{group}}" class="btn btn-outline-primary" role="btn"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分組</a>	
 {% endif %}
-<a href="/student/team/stage/{{classroom_id}}/{{group}}/{{team.id}}" class="btn btn-default" role="btn"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> 舞台</a>	
+<a href="/student/team/stage/{{classroom_id}}/{{group}}/{{team.id}}" class="btn btn-outline-primary" role="btn"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> 舞台</a>
 <a href="/student/team/content/{{classroom_id}}/{{group}}/{{team.id}}/0/0" class="btn btn-primary" role="btn"><span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> 組內資料</a>	
 <a href="/student/team/content/{{classroom_id}}/{{group}}/{{team.id}}/1/0" class="btn btn-primary" role="btn"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> 組外發表</a>
 <!--
@@ -23,6 +23,4 @@
 {% endfor %}
 {% endblock %}
 
-	{% block domready %}
-	    $('body').css('background-image','url(/static/images/back1.gif)');
-	{% endblock %}
+

@@ -3,14 +3,14 @@
 {% block content %}
 <a href="/studnet/team/content/{{ team.id }}" class="btn btn-success" role="btn">{{team.title}}</a>
 <section class="wrapper">
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a aria-control="tab1" data-toggle="tab" role="tab" href="#tab1">外部網址</a></li>
-    <li role="presentation"><a aria-control="tab2" data-toggle="tab" role="tab" href="#tab2">Youtube影片</a></li>
-    <li role="presentation"><a aria-control="tab3" data-toggle="tab" role="tab" href="#tab3">上傳檔案</a></li>
-    <li role="presentation"><a aria-control="tab4" data-toggle="tab" role="tab" href="#tab4">上傳文字</a></li>
+    <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="nav-item"><a aria-control="tab1" data-toggle="tab" role="tab" href="#tab1" class="nav-link active">外部網址</a></li>    
+    <li role="presentation" class="nav-item"><a aria-control="tab2" data-toggle="tab" role="tab" href="#tab2" class="nav-link">Youtube影片</a></li>   
+    <li role="presentation" class="nav-item"><a aria-control="tab3" data-toggle="tab" role="tab" href="#tab3" class="nav-link">上傳檔案</a></li>   
+    <li role="presentation" class="nav-item"><a aria-control="tab4" data-toggle="tab" role="tab" href="#tab4" class="nav-link">上傳文字</a></li>   
   </ul>
   <section class="tab-content">
-    <article id="tab1" class="tab-pane fade in active" role="tabpanel">
+    <article id="tab1" class="tab-pane fade show active" role="tabpanel">
       <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type=hidden name=types value="1">
@@ -44,7 +44,7 @@
           <label for="youtube-memo">說明</label>
           <textarea name="memo" id="youtube-memo" rows="10" class="form-control"></textarea>
         </div>
-        <input type="submit" value="送出" class="btn btn-default" />
+        <input type="submit" value="送出" class="btn btn-primary" />
       </form>
     </article>
     <!--------------------------------------------------------->
@@ -81,6 +81,3 @@
 </section>
 {% endblock %}
 
-{% block domready %}
-  $('body').css('background-image','url(/static/images/back1.gif)');
-{% endblock %}

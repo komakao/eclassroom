@@ -7,7 +7,7 @@
                 <tr>
                   <td>第{{group|add:1}}組：</td>
                   <td>{% if leader %}<button class="btn btn-default">{{leader.seat}}){{leader.student.first_name}}{% endif %}</button></td>
-                  <td>{% for member in members %}<button class="btn btn-default">({{member.seat}}){{member.student_id|realname}}</button>{% endfor %}</td>                  
+                  <td>{% for member in members %}<button class="btn btn-default">({{member.seat}}){{member.student_id|nickname}}</button>{% endfor %}</td>                  
                   {% if count > 0 %}
                   <td><a href="/student/team/content/{{classroom_id}}/{{grouping}}/{{team_id}}/1/{{group}}">觀看發表作品({{count}})</a></td>
                   {% else %}
@@ -17,6 +17,3 @@
                 {% endfor %}
                 </table>                  
 {% endblock %}
-{% block domready %}
-	    $('body').css('background-image','url(/static/images/back1.gif)');
-	{% endblock %}

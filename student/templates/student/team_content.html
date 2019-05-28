@@ -5,69 +5,69 @@
         <a href="/student/team/content/add/{{classroom_id}}/{{grouping}}/{{team_id}}" class="btn btn-warning" role="btn"><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> 新增資料</a>
 <button type="button" class="btn btn-success">{{teamwork.title}}</button>
           {% for work in contents %}
-   <div class="panel panel-default"> 
+   <div class="card card-default"> 
               {% if work.types == 1 %}
-   <div class="panel-heading"><button type="button" class="btn btn-default">{{forloop.revcounter}}</button>
+   <div class="card-header"><button type="button" class="btn btn-default">{{forloop.revcounter}}</button>
     {% if leader %}
     {% if work.publish %}<a href="#" data-workid="{{work.id}}" data-action="unset" class="publish btn btn-info" role="button">取消發表</a>{% else %}<a href="#" data-workid="{{work.id}}" data-action="set" class="publish btn btn-default" role="button">設為發表</a>{% endif %}
     {% else %}
     {% if work.publish %}<button class="btn btn-info">已發表</button>{% else %}<button class="btn btn-defualt">未發表</button>{% endif %}
     {% endif %}
-    {{work.user_id|realname}} -- {{work.publication_date}} -- 外部網址 
+    {{work.user_id|nickname}} -- {{work.publication_date}} -- 外部網址 
 {% if work.user_id == request.user.id %}
     <A href="/student/team/content/delete/{{classroom_id}}/{{grouping}}/{{team_id}}/{{work.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
     <a href="/student/team/content/edit/{{classroom_id}}/{{grouping}}/{{team_id}}/{{work.id}}"><img src="/static/images/edit.gif"> 編輯</a>
 {% endif %}
 </div>
-  <div class="panel-body">
+  <div class="card-body">
     <a href="{{work.link}}" target="_blank">{% if work.title %}{{work.title}}{% else %}開啟連結{% endif %}</a>
   </div>
             
               {% elif work.types == 2 %}
-  <div class="panel-heading"><button type="button" class="btn btn-default">{{forloop.revcounter}}</button>
+  <div class="card-header"><button type="button" class="btn btn-default">{{forloop.revcounter}}</button>
     {% if leader %}
     {% if work.publish %}<a href="#" data-workid="{{work.id}}" data-action="unset" class="publish btn btn-info" role="button">取消發表</a>{% else %}<a href="#" data-workid="{{work.id}}" data-action="set" class="publish btn btn-default" role="button">設為發表</a>{% endif %}
     {% else %}
     {% if work.publish %}<button class="btn btn-info">已發表</button>{% else %}<button class="btn btn-defualt">未發表</button>{% endif %}
     {% endif %} 
-    {{work.user_id|realname}} -- {{work.publication_date}} -- Youtube影片 
+    {{work.user_id|nickname}} -- {{work.publication_date}} -- Youtube影片 
     {% if work.user_id == request.user.id %}
     <A href="/student/team/content/delete/{{classroom_id}}/{{grouping}}/{{team_id}}/{{work.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
     <a href="/student/team/content/edit/{{classroom_id}}/{{grouping}}/{{team_id}}/{{work.id}}"><img src="/static/images/edit.gif"> 編輯</a>
 {% endif %}	</div>
-  <div class="panel-body">
+  <div class="card-body">
     <div class="embed-responsive embed-responsive-16by9">
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player{{work.id}}"></div>
     </div>
 </div>          
               {% elif work.types == 3 %}
-  <div class="panel-heading"><button type="button" class="btn btn-default">{{forloop.revcounter}}</button>
+  <div class="card-header"><button type="button" class="btn btn-default">{{forloop.revcounter}}</button>
     {% if leader %}
     {% if work.publish %}<a href="#" data-workid="{{work.id}}" data-action="unset" class="publish btn btn-info" role="button">取消發表</a>{% else %}<a href="#" data-workid="{{work.id}}" data-action="set" class="publish btn btn-default" role="button">設為發表</a>{% endif %}
     {% else %}
     {% if work.publish %}<button class="btn btn-info">已發表</button>{% else %}<button class="btn btn-defualt">未發表</button>{% endif %}
     {% endif %}   
-    {{work.user_id|realname}} -- {{work.publication_date}} -- 下載檔案 
+    {{work.user_id|nickname}} -- {{work.publication_date}} -- 下載檔案 
     {% if work.user_id == request.user.id %}
     <A href="/student/team/content/delete/{{classroom_id}}/{{grouping}}/{{team_id}}/{{work.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
     <a href="/student/team/content/edit/{{classroom_id}}/{{grouping}}/{{team_id}}/{{work.id}}"><img src="/static/images/edit.gif"> 編輯</a>
 {% endif %}</div>
-  <div class="panel-body"> <a href="/student/team/download/{{work.id}}" target="_blank">{{work.title}}</a> </div>                        
+  <div class="card-body"> <a href="/student/team/download/{{work.id}}" target="_blank">{{work.title}}</a> </div>                        
               {% elif work.types == 4 %}
-  <div class="panel-heading"><button type="button" class="btn btn-default">{{forloop.revcounter}}</button>
+  <div class="card-header"><button type="button" class="btn btn-default">{{forloop.revcounter}}</button>
     {% if leader %}
     {% if work.publish %}<a href="#" data-workid="{{work.id}}" data-action="unset" class="publish btn btn-info" role="button">取消發表</a>{% else %}<a href="#" data-workid="{{work.id}}" data-action="set" class="publish btn btn-default" role="button">設為發表</a>{% endif %}
     {% else %}
     {% if work.publish %}<button class="btn btn-info">已發表</button>{% else %}<button class="btn btn-defualt">未發表</button>{% endif %}
     {% endif %}   
-    {{work.user_id|realname}} -- {{work.publication_date}} -- 自訂文字 
+    {{work.user_id|nickname}} -- {{work.publication_date}} -- 自訂文字 
     {% if work.user_id == request.user.id %}
     <A href="/student/team/content/delete/{{classroom_id}}/{{grouping}}/{{team_id}}/{{work.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
     <a href="/student/team/content/edit/{{classroom_id}}/{{grouping}}/{{team_id}}/{{work.id}}"><img src="/static/images/edit.gif"> 編輯</a>
 {% endif %}</div>               
 {% endif %}
-    <div class="panel-body">{{ work.memo|memo|safe }}</div>
+    <div class="card-body">{{ work.memo|memo|safe }}</div>
 
 
   <div class="modal fade" tabindex="-1" role="dialog" id="vidModal">   
@@ -173,7 +173,6 @@ $(document).ready(function () {
 
 {% endblock %}
 	{% block domready %}
-	    $('body').css('background-image','url(/static/images/back1.gif)');
   
   $('a.publish').click(function(e){
     var launcher = this;  

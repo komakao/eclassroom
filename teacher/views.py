@@ -2513,7 +2513,7 @@ class SpeculationCreateView(CreateView):
           forum_class = SpeculationClass(forum_id=self.object.id, classroom_id=classroom)
           forum_class.save()
         
-        return redirect("/teacher/speculation/"+self.kwargs['classroom_id'])           
+        return redirect("/teacher/speculation/"+str(self.kwargs['classroom_id']))           
         
     def get_context_data(self, **kwargs):
         context = super(SpeculationCreateView, self).get_context_data(**kwargs)
@@ -3031,7 +3031,7 @@ class SpeculationAnnotationCreateView(CreateView):
         work.color = self.object.color
         work.save()         
   
-        return redirect("/teacher/speculation/annotation/"+self.kwargs['forum_id'])  
+        return redirect("/teacher/speculation/annotation/"+str(self.kwargs['forum_id']))  
 
     def get_context_data(self, **kwargs):
         ctx = super(SpeculationAnnotationCreateView, self).get_context_data(**kwargs)

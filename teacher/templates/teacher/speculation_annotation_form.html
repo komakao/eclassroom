@@ -7,13 +7,16 @@
            <table class="table">
    
              <tr><td>類別</td><td><input type=text name=kind value={{content.kind}}></td></tr>
-             <tr><td>顏色</td><td><input type=color name=color value={% if content.color %}{{content.color}}{% else %}#FFFF99{% endif %}></td></tr>
+             <tr><td>顏色</td><td><input id="color" type="color" name=color value={% if content.color %}{{content.color}}{% else %}#FFFF99{% endif %}></td></tr>
 
             </table>
             {% csrf_token %}
             <input type="submit" value="送出">
         </form>
 {% endblock %}
-	{% block domready %}
-	    $('body').css('background-image','url(/static/images/back3.gif)');
-	{% endblock %}	
+
+
+{% block domready %}
+$("#color").removeClass("form-control");
+{% endblock %}
+
