@@ -2704,7 +2704,8 @@ class SpeculationContentCreateView(CreateView):
         work = SpeculationContent(forum_id=self.object.forum_id)
         if self.object.types == 1:
             work.types = 1
-            work.text = self.object.text
+            work.link = self.object.link
+            work.title = self.object.title            
         elif self.object.types  == 2:
             work.types = 2					
             work.youtube = self.object.youtube
@@ -2718,14 +2719,13 @@ class SpeculationContentCreateView(CreateView):
             fs.save("static/upload/"+str(self.request.user.id)+"/"+filename, myfile)	
         elif self.object.types  == 4:
             work.types = 4
-            work.link = self.object.link
-            work.title = self.object.title
+            work.text = self.object.text
         work.memo = self.object.memo
         work.save()         
 
-        if self.object.types == 3:
-          return JsonResponse({'files': [{'name': work.filename}]}, safe=False)
-        return redirect("/teacher/speculation/content/"+self.kwargs['forum_id'])  
+        #if self.object.types == 3:
+        #  return JsonResponse({'files': [{'name': work.filename}]}, safe=False)
+        return redirect("/teacher/speculation/content/"+str(self.kwargs['forum_id']))  
 
     def get_context_data(self, **kwargs):
         ctx = super(SpeculationContentCreateView, self).get_context_data(**kwargs)
@@ -2736,7 +2736,7 @@ def speculation_delete(request, forum_id, content_id):
     instance = SpeculationContent.objects.get(id=content_id)
     instance.delete()
 
-    return redirect("/teacher/speculation/content/"+forum_id)  
+    return redirect("/teacher/speculation/content/"+str(forum_id))  
 	
 def speculation_edit(request, forum_id, content_id):
     try:

@@ -404,3 +404,14 @@ def int_to_str(number):
 def classroom_name(classroom_id):
     classroom = Classroom.objects.get(id=classroom_id)
     return classroom.name
+
+@register.filter
+def in_deadline_speculation(forum_id, classroom_id):
+    try:
+        fclass = SpeculationClass.objects.get(forum_id=forum_id, classroom_id=classroom_id)
+    except ObjectDoesNotExist:
+        fclass = SpeculationClass(forum_id=forum_id, classroom_id=classroom_id)
+    if fclass.deadline:
+        if timezone.now() > fclass.deadline_date:
+            return fclass.deadline_date
+    return ""

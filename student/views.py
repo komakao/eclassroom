@@ -1623,7 +1623,7 @@ class SpeculationListView(ListView):
         fworks = SpeculationWork.objects.filter(id__in=fclass_dict.keys()).order_by("-id")
         sfwork_pool = SSpeculationWork.objects.filter(student_id=self.request.user.id).order_by("-id")
         for fwork in fworks:
-            sfworks = filter(lambda w: w.index==fwork.id, sfwork_pool)
+            sfworks = list(filter(lambda w: w.index==fwork.id, sfwork_pool))
             if len(sfworks)> 0 :
                 queryset.append([fwork, sfworks[0].publish, fclass_dict[fwork.id], len(sfworks)])
             else :
@@ -1735,7 +1735,7 @@ class SpeculationAnnotateView(ListView):
             ids.append(enroll.student_id)
         work_pool = SSpeculationWork.objects.filter(index=self.kwargs['index'], student_id__in=ids).order_by("-id")
         for enroll in enrolls:
-            works = filter(lambda w: w.student_id==enroll.student_id, work_pool)
+            works = list(filter(lambda w: w.student_id==enroll.student_id, work_pool))
             if len(works)> 0:
                 queryset.append([enroll, works[0].publish])
             else:

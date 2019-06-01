@@ -6,42 +6,39 @@
 <button type="button" class="btn btn-success">{{fwork.title}}</button>
 
         {% for work in contents %}
- <div class="panel panel-default"> 
-              {% if work.types == 1 %}
-  </a>
-
-  <div class="panel-heading"><button type="button" class="btn btn-default">{{forloop.counter}}</button> 文字
+ <div class="card card-default"> 
+              {% if work.types == 4 %}
+  <div class="card-header"><button type="button" class="btn btn-default">{{forloop.counter}}</button> 文字
     <A href="/teacher/speculation/content/delete/{{forum_id}}/{{work.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
     <a href="/teacher/speculation/content/edit/{{forum_id}}/{{work.id}}"><img src="/static/images/edit.gif"> 編輯</a>
-  </div>
-  <div class="panel-body"> {{work.text|memo|safe}}</div>              
+  </div>           
               {% elif work.types == 2 %}
-  <div class="panel-heading"><button type="button" class="btn btn-default">{{forloop.counter}}</button> Youtube影片
+  <div class="card-header"><button type="button" class="btn btn-default">{{forloop.counter}}</button> Youtube影片
     <A href="/teacher/speculation/content/delete/{{forum_id}}/{{work.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
     <a href="/teacher/speculation/content/edit/{{forum_id}}/{{work.id}}"><img src="/static/images/edit.gif"> 編輯</a>
 </div>
-  <div class="panel-body">
+  <div class="card-body">
     <div class="embed-responsive embed-responsive-16by9">
                <iframe width="560" height="315" class="embed-responsive-item" src="https://www.youtube.com/embed/{{work.youtube|number}}?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
     </div>
 </div>          
               {% elif work.types == 3 %}
-  <div class="panel-heading"><button type="button" class="btn btn-default">{{forloop.counter}}</button> 圖片
+  <div class="card-header"><button type="button" class="btn btn-default">{{forloop.counter}}</button> 圖片
     <A href="/teacher/speculation/content/delete/{{forum_id}}/{{work.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
     <a href="/teacher/speculation/content/edit/{{forum_id}}/{{work.id}}"><img src="/static/images/edit.gif"> 編輯</a>
 </div>
-  <div class="panel-body"> <img style="max-width: 100%" src="/static/upload/{{work.filename}}"></div>                        
-              {% elif work.types == 4 %}
-  <div class="panel-heading"><button type="button" class="btn btn-default">{{forloop.counter}}</button> 外部網址 
+  <div class="card-body"> <img style="max-width: 100%" src="/static/upload/{{work.filename}}"></div>                        
+              {% elif work.types == 1 %}
+  <div class="card-header"><button type="button" class="btn btn-default">{{forloop.counter}}</button> 外部網址 
     <A href="/teacher/speculation/content/delete/{{forum_id}}/{{work.id}}" onclick="return confirm('確定要刪除嗎?')"><img src="/static/images/delete.gif"> 刪除</a>
     <a href="/teacher/speculation/content/edit/{{forum_id}}/{{work.id}}"><img src="/static/images/edit.gif"> 編輯</a>
   </div>
-  <div class="panel-body">
+  <div class="card-body">
     <a href="{{work.link}}" target="_blank">{% if work.title %}{{work.title}}{% else %}開啟連結{% endif %}</a>
   </div>        
 {% endif %}
 {% if work.memo %}
-<div class="panel-footer">
+<div class="card-footer">
   {{ work.memo|memo|safe }}
 </div>
 {% endif %}
@@ -119,6 +116,3 @@ $(document).ready(function () {
 });
 </script>
 {% endblock %}
-	{% block domready %}
-	    $('body').css('background-image','url(/static/images/back3.gif)');
-	{% endblock %}	

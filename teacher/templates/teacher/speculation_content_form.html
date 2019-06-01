@@ -11,108 +11,88 @@
 
 {% block content %}
 <a href="/teacher/speculation/content/{{ forum.id }}" class="btn btn-success" role="btn">返回 {{forum.title}}</a>
-<section class="wrapper">
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a aria-control="tab1" data-toggle="tab" role="tab" href="#tab1">文字</a></li>
-    <li role="presentation"><a aria-control="tab2" data-toggle="tab" role="tab" href="#tab2">Youtube影片</a></li>
-    <li role="presentation"><a aria-control="tab3" data-toggle="tab" role="tab" href="#tab3">上傳圖片</a></li>
-    <li role="presentation"><a aria-control="tab4" data-toggle="tab" role="tab" href="#tab4">外部網址</a></li>
-  </ul>
-  <section class="tab-content">
-    <article id="tab1" class="tab-pane fade in active" role="tabpanel">
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type=hidden name=types value="1">
-        <input type=hidden name=forum_id value={{forum.id}}>
-        <div class="form-group">
-          <label for="text">文字內容</label>
-          <textarea name="text" id="text" rows="10" class="form-control"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="text-memo">說明</label>
-          <textarea name="memo" id="text-memo" rows="10" class="form-control"></textarea>
-        </div>
-        <input type="submit" class="btn btn-default" value="送出" />
-      </form>
-    </article>
-    <!--------------------------------------------------------->
-    <article id="tab2" class="tab-pane fade" role="tabpanel">
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type=hidden name=types value="2">
-        <input type=hidden name=forum_id value={{forum.id}}>
-        <div class="form-group">
-          <label for="id_content_youtube">影片網址</label>
-          <input id="id_content_youtube" maxlength="250" name="youtube" type="text" class="form-control" />
-        </div>
-        <div class="form-group">
-          <label for="video-memo">說明</label>
-          <textarea name="memo" id="video-memo" rows="10" class="form-control"></textarea>
-        </div>
-        <input type="submit" class="btn btn-default" value="送出" />
-      </form>
-    </article>
-    <!--------------------------------------------------------->
-    <article id="tab3" class="tab-pane fade" role="tabpanel">
-      <form method="post" enctype="multipart/form-data" id="fileupload">
-        {% csrf_token %}
-        <input type=hidden name=types value="3">
-        <input type=hidden name=forum_id value={{forum.id}}>
-        <div class="row fileupload-buttonbar">
-          <div class="col-lg-7">
-            <!-- The fileinput-button span is used to style the file input field as button -->
-            <span class="btn btn-success fileinput-button">
-              <i class="glyphicon glyphicon-plus"></i>
-              <span>選取檔案...</span>
-              <input type="file" name="content_file" multiple accept=".png, .jpg, .jpeg, .gif" />
-            </span>
-            <button type="button" class="btn btn-primary start">
-              <i class="glyphicon glyphicon-upload"></i>
-              <span>開始上傳</span>
-            </button>
-            <!-- The global file processing state -->
-            <span class="fileupload-process"></span>
-          </div>
-          <!-- The global progress state -->
-          <div id="progress" class="col-lg-5 fileupload-progress">
-            <!-- The global progress bar -->
-            <div class="progress progress-animated progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-              <div class="progress-bar progress-bar-success" style="width:0%;"></div>
-            </div>
-            <!-- The extended global progress state -->
-            <div class="progress-extended">&nbsp;</div>
-          </div>
-        </div>
-        <!-- The table listing the files available for upload/download -->
-        <table role="presentation" class="table">
-          <tbody id="files" class="files"></tbody>
-        </table>
-      </form>
-    </article>
-    <!--------------------------------------------------------->
-    <article id="tab4" class="tab-pane fade" role="tabpanel">
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type=hidden name=types value="4">
-        <input type=hidden name=forum_id value={{forum.id}}>
-        <div class="form-group">
-          <label for="id_content_title">文章褾題</label>
-          <input id="id_content_title" maxlength="250" name="title" type="text" placeholder="開啟連結" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="id_content_link">文章網址</label>
-          <input id="id_content_link" maxlength="250" name="link" type="text" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="article-memo">說明</label>
-          <textarea name="memo" id="article-memo" rows="10" class="form-control"></textarea>
-        </div>
-        <input type="submit" class="btn btn-default" value="送出">
-      </form>
-    </article>
-  </section>
-</section>
-{% endblock %}
+ <!-- Nav tabs -->
+ <ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#tab1">外部網址</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab2">Youtube影片</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab3">上傳圖片</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab4">上傳文字</a>
+  </li>    
+</ul>
+<!-- Tab panes -->
+<div class="tab-content">
+  <div id="tab1" class="tab-pane active">
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type=hidden name=types value="1">
+      <input type=hidden name=forum_id value={{forum.id}}>
+      <div class="form-group">
+        <label for="id_content_title">文章標題</label>
+        <input id="id_content_title" maxlength="250" name="title" type="text" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="id_content_link">文章網址</label>
+        <input id="id_content_link" maxlength="250" name="link" type="text" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="article-memo">說明</label>
+        <textarea name="memo" id="article-memo" rows="10" class="form-control"></textarea>
+      </div>
+      <input type="submit" value="送出" class="btn btn-info" />
+    </form>
+  </div>
+  <div id="tab2" class="tab-pane fade">
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type=hidden name=types value="2">
+      <input type=hidden name=forum_id value={{forum.id}}>
+      <div class="form-group">
+        <label for="id_content_youtube">影片網址</label>
+        <input id="id_content_youtube" maxlength="250" name="youtube" type="text" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="youtube-memo">說明</label>
+        <textarea name="memo" id="youtube-memo" rows="10" class="form-control"></textarea>
+      </div>
+      <input type="submit" value="送出" class="btn btn-info" />
+    </form>
+  </div>
+  <div id="tab3" class="tab-pane fade">
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type=hidden name="types" value="3">
+      <input type=hidden name=forum_id value={{forum.id}}>
+      <div class="form-group">
+        <label for="content_file">圖片</label>
+        <input id="content_file" name="content_file" type="file" />
+      </div>
+      <div class="form-group">
+        <label for="file-memo">說明</label>
+        <textarea name="memo" id="file-memo" rows="10" class="form-control"></textarea>
+      </div>
+      <input type="submit" value="送出" class="btn btn-info" />
+    </form>
+  </div>
+  <div id="tab4" class="tab-pane fade">
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type=hidden name="types" value="4">
+      <input type=hidden name=forum_id value={{forum.id}}>
+      <div class="form-group">
+        <label for="text-memo">文字</label>
+        <textarea name="memo" id="text-memo" rows="10" class="form-control"></textarea>
+      </div>
+      <input type="submit" value="送出" class="btn btn-info" />
+    </form>
+  </div>    
+</div>{% endblock %}
 
 {% block domready %}
   $('body').css('background-image','url(/static/images/back3.gif)');

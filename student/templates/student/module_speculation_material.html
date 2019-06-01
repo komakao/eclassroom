@@ -2,13 +2,13 @@
   <div class="panel panel-default">
     <div class="panel-body{% if work.types == 1 or work.types == 3 %} memo-content{% elif work.types == 2 %} embed-responsive embed-responsive-16by9{% endif %}" data-type="{{ work.types }}">
       {% spaceless %}
-      {% if work.types == 1 %}
+      {% if work.types == 4 %}
         {{work.text|memo|safe}}
       {% elif work.types == 2 %}
         <iframe width="560" height="315" class="embed-responsive-item" src="https://www.youtube.com/embed/{{work.youtube|number}}?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
       {% elif work.types == 3 %}
         <img src="/static/upload/{{work.filename}}" class="annotatable" style="max-width: 100%" />
-      {% elif work.types == 4 %}
+      {% elif work.types == 1 %}
         外部網址：<a href="{{work.link}}" target=_blank>{{work.title}}</a>
       {% endif %}
       {% endspaceless %}

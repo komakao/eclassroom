@@ -7,7 +7,7 @@
            <input type=hidden name="types" value="{{content.types}}">
   <ul class="list-group">
     <li class="list-group-item">					 
-         {% if content.types == 1 %}
+         {% if content.types == 4 %}
       <h4 class="list-group-item-heading">文字</h4>
 			<textarea name="text" id="text" cols="30" rows="10" class="form-control list-group-item-text">{{content.text}}</textarea>
         {% elif content.types == 2 %}
@@ -15,7 +15,7 @@
 
       {% elif content.types == 3 %}
             檔案:<input id="id_content_file" name="content_file" type="file"/>
-         {% elif content.types == 4 %}
+         {% elif content.types == 1 %}
             文章褾題:<input id="id_title" maxlength="250" name="title" type="text" class="form-control list-group-item-text" placeholder="開啟連結" value="{{content.title}}">
            文章網址:<input id="id_link" maxlength="250" name="link" type="text" value="{{content.link}}" class="form-control list-group-item-text">
 					 
