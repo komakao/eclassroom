@@ -209,9 +209,9 @@ def lessons(request, subject_id):
                     if len(works) > 0 :
                         sworks = list(filter(lambda w: w.index==assignment[2], works))
                         if len(sworks)>0 :
-                            lesson_list[int(subject_id)-1][1][unit][1][index].append(sworks[0])
+                            lesson_list[int(subject_id)-2][1][unit][1][index].append(sworks[0])
                         else :
-                            lesson_list[int(subject_id)-1][1][unit][1][index].append(False)
+                            lesson_list[int(subject_id)-2][1][unit][1][index].append(False)
                     else :
                         lesson_list[int(subject_id)-2][1][unit][1][index].append(False)
         elif subject_id == 1:
@@ -229,6 +229,7 @@ def lessons(request, subject_id):
 def lesson(request, lesson, unit, index):
         lesson_dict = OrderedDict()
         works = Work.objects.filter(user_id=request.user.id, lesson=lesson, index=index).order_by("-id")
+
         for unit1 in lesson_list[int(lesson)-2][1]:
             for assignment in unit1[1]:
                 sworks = list(filter(lambda w: w.index==assignment[2], works))
@@ -257,11 +258,35 @@ def submit(request, typing, lesson, index):
     work_dict = {}
     work_dict = dict(((int(work.index), [work, WorkFile.objects.filter(work_id=work.id).order_by("-id")]) for work in Work.objects.filter(typing=typing, lesson=lesson, user_id=request.user.id)))
     works = Work.objects.filter(typing=typing, user_id=request.user.id, lesson=lesson, index=index).order_by("-id")
+        
+    if lesson == 1:
+        assignments = lesson_list1
+        work_dict = dict(((work.index, work) for work in Work.objects.filter(typing=typing, user_id=request.user.id, lesson=lesson)))
+
+        for assignment in assignments:
+            sworks = list(filter(lambda w: w.index==assignment[2], works))
+            #assistant = list(filter(lambda w: (w.index==assignment[2] and w.group==group), assistant_pool))
+            if len(sworks)>0 :
+                #if len(assistant) > 0:
+                #    lesson_dict[assignment[0]] = [assignment[1], assignment[2], sworks[0], 0, assistant[0].student_id]
+                #else :
+                lesson_dict[assignment[3]] = [assignment[1], assignment[2], sworks[0], 0, 0]                        
+            else :
+                lesson_dict[assignment[3]] = [assignment[1],  assignment[2], None, 0]
+    elif lesson == 2 or lesson == 3:
+        assignments = lesson_list      
+        unit_count = 1
+        for unit in lesson_list[int(lesson)-2][1]:
+            for assignment in unit[1]: 
+                sworks = list(filter(lambda w: w.index==assignment[2], works))
+                #assistant = list(filter(lambda w: (w.index==assignment[2] and w.group==group), assistant_pool))
+                if len(sworks)>0:
+                    lesson_dict[assignment[3]] = [unit[0], assignment[0], sworks[0], unit_count, 0]                        
+                else :
+                    lesson_dict[assignment[3]] = [unit[0], assignment[0], None, unit_count]
+
     if typing == 0: 
-        for unit in lesson_list[int(lesson)-1][1]:
-            for assignment in unit[1]:
-                lesson_dict[assignment[2]] = assignment[0]
-        assignment = lesson_dict[index]
+        assignment = lesson_dict[index][1]
     elif typing == 1:
         assignment = TWork.objects.get(id=index).title
     scores = []
@@ -383,7 +408,7 @@ def work_download(request, typing, lesson, index, user_id, workfile_id):
             for assignment in lesson_list1:
                 lesson_dict[assignment[3]] = assignment[2]
         else:
-            for unit in lesson_list[int(lesson)-1][1]:
+            for unit in lesson_list[int(lesson)-2][1]:
                 for assignment in unit[1]:
                     lesson_dict[assignment[2]] = assignment[0]
     elif typing == 1:
@@ -462,7 +487,7 @@ def work_group(request, typing, lesson, index, classroom_id):
         student_groups.append([group, works, group_assistants])
         if typing == 0:
             lesson_dict = {}
-            for unit in lesson_list[int(lesson)-1][1]:
+            for unit in lesson_list[int(lesson)-2][1]:
                 for assignment in unit[1]:
                     lesson_dict[assignment[2]] = assignment[0]    
             assignment = lesson_dict[int(index)]
@@ -536,7 +561,7 @@ def memo_user(request, typing, user_id, lesson, classroom_id):
     works = Work.objects.filter(lesson=lesson, user_id=user_id, typing=typing)
     lesson_dict = {}
     if typing == 0:
-        for unit in lesson_list[int(lesson)-1][1]:
+        for unit in lesson_list[int(lesson)-2][1]:
             for assignment in unit[1]:
                 sworks = list(filter(lambda w: w.index==assignment[2], works))
                 if len(sworks)>0 :
@@ -689,7 +714,7 @@ def work_groups(request, classroom_id):
         work_pool = Work.objects.filter(user_id__in=student_ids, lesson=lesson).order_by("id")					
         lessons = []		
         lesson_dict = OrderedDict()
-        for unit1 in lesson_list[int(lesson)-1][1]:
+        for unit1 in lesson_list[int(lesson)-2][1]:
             for assignment in unit1[1]:               
                 members = filter(lambda u: u.group == group, enrolls)								
                 student_group = []

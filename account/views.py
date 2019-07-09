@@ -119,8 +119,18 @@ class Login(FormView):
             title = "請修改您的暱稱"
             url = "/account/adminname/" + str(self.request.user.id)
             message = Message(title=title, url=url, time=timezone.now())
-            message.save()                        
-                    
+            message.save()     
+
+            # message for group member
+            messagepoll = MessagePoll(message_id = message.id,reader_id=1)
+            messagepoll.save() 
+
+            # create Message
+            title = "請修改您的密碼"
+            url = "/account/password/1/0"
+            message = Message(title=title, url=url, time=timezone.now())
+            message.save()                                    
+
             # message for group member
             messagepoll = MessagePoll(message_id = message.id,reader_id=1)
             messagepoll.save() 														

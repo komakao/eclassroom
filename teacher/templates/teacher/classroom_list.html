@@ -35,8 +35,10 @@
                 <!--
                 <a href="" role="button" class="btn btn-outline-warning"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 課程區</a>                 
                 -->
-                <a href="/teacher/team/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 合作區</a>                                       				
+                <a href="/teacher/team/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 合作區</a>          
+                <!--                             				
                 <a href="/teacher/speculation/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> 註記區</a>   
+                -->             
               </p>  
         {% if classroom.lesson > 0 %}                   
               <p style="padding:0px; margin:2px;">程式設計：
@@ -44,7 +46,9 @@
 				<a href="/teacher/work/assistant/0/{{classroom.id}}/" role="button" class="btn btn-outline-success"> <i class="fa fa-heart-o" aria-hidden="true"></i> 小老師</a>				
 				<a href="/teacher/work2/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-bookmark-o" aria-hidden="true"></i> 自訂作業</a> 
         <a href="/teacher/work/assistant/1/{{classroom.id}}/" role="button" class="btn btn-outline-success"> <i class="fa fa-bookmark-o" aria-hidden="true"></i> 小老師</a>	       
+        <!--
         <a href="" role="button" class="btn btn-outline-warning"> <i class="fa fa-user-o" aria-hidden="true"></i> 創意秀</a>					        
+        -->
 				<a href="/teacher/memo/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hourglass-o" aria-hidden="true"></i> 心得</a>						  			
 				<a href="/teacher/grade/0/1/{{classroom.id}}" role="button" class="btn btn-outline-success"> <i class="fa fa-hourglass-o" aria-hidden="true"></i> 成績</a>  
       </p>       	

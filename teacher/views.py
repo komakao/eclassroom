@@ -1299,7 +1299,7 @@ def scoring(request, classroom_id, user_id, index, typing):
 
     if typing == 0:
         lesson_dict = OrderedDict()
-        for unit1 in lesson_list[int(lesson)-1][1]:
+        for unit1 in lesson_list[int(lesson)-2][1]:
             for assignment in unit1[1]:
                 lesson_dict[assignment[2]] = assignment[0]
         lesson_name = lesson_dict[int(index)]
@@ -1426,7 +1426,7 @@ def score_peer(request, typing, index, classroom_id, group):
         group_id = 0    
     if typing == 0:
         lesson_dict = OrderedDict()
-        for unit1 in lesson_list[int(lesson)-1][1]:
+        for unit1 in lesson_list[int(lesson)-2][1]:
             for assignment in unit1[1]:
                 lesson_dict[assignment[2]] = assignment[0]
         queryset = lesson_dict[int(index)]
@@ -1654,7 +1654,7 @@ def steacher_make(request):
 
     lesson_dict = OrderedDict()
     if typing == "0":
-        for unit1 in lesson_list[int(lesson)-1][1]:
+        for unit1 in lesson_list[int(lesson)-2][1]:
             for assignment in unit1[1]:
                 lesson_dict[assignment[2]] = assignment[0]
         assignment = lesson_dict[int(index)]
@@ -1726,9 +1726,32 @@ def grade(request, typing, unit, classroom_id):
     data = []
 	
     lesson_dict = OrderedDict()
-    for unit1 in lesson_list[int(lesson)-1][1]:
-        for assignment in unit1[1]:
-            lesson_dict[assignment[2]] = assignment
+    if lesson == 1:
+        assignments = lesson_list1
+        work_dict = dict(((work.index, work) for work in Work.objects.filter(typing=typing, user_id=request.user.id, lesson=lesson)))
+
+        for assignment in assignments:
+            sworks = list(filter(lambda w: w.index==assignment[3], work_pool))
+            #assistant = list(filter(lambda w: (w.index==assignment[2] and w.group==group), assistant_pool))
+            if len(sworks)>0 :
+                #if len(assistant) > 0:
+                #    lesson_dict[assignment[0]] = [assignment[1], assignment[2], sworks[0], 0, assistant[0].student_id]
+                #else :
+                lesson_dict[assignment[3]] = [assignment[1], assignment[2], sworks[0], 0, 0]                        
+            else :
+                lesson_dict[assignment[3]] = [assignment[1],  assignment[2], None, 0]
+    elif lesson == 2 or lesson == 3:
+        assignments = lesson_list      
+        unit_count = 1
+        for unit in lesson_list[int(lesson)-2][1]:
+            for assignment in unit[1]: 
+                sworks = list(filter(lambda w: w.index==assignment[2], work_pool))
+                #assistant = list(filter(lambda w: (w.index==assignment[2] and w.group==group), assistant_pool))
+                if len(sworks)>0:
+                    lesson_dict[assignment[2]] = [unit[0], assignment[0], sworks[0], unit_count, 0]                        
+                else :
+                    lesson_dict[assignment[2]] = [unit[0], assignment[0], None, unit_count]
+
     lesson_list2 = sorted(lesson_dict.items())
     for enroll in enrolls:
       enroll_score = []
@@ -1739,9 +1762,9 @@ def grade(request, typing, unit, classroom_id):
         lesson_list2 = lesson_list2
       elif typing == 1:
         lesson_list2 = TWork.objects.filter(classroom_id=classroom_id)
-      for index, assignment in enumerate(lesson_list2):
+      for index, assignment in lesson_list2:
             if typing == 0: 			    
-                works = list(filter(lambda w: w.index == index+1 and w.user_id==enroll.student_id, work_pool))
+                works = list(filter(lambda w: w.index == index and w.user_id==enroll.student_id, work_pool))
             else :
                 works = list(filter(lambda w: w.index == assignment.id and w.user_id==enroll.student_id, work_pool))
             works_count = len(works)
@@ -1782,9 +1805,31 @@ def grade_excel(request, typing, unit, classroom_id):
     work_pool = Work.objects.filter(typing=typing, user_id__in=user_ids, lesson=lesson).order_by('id')
     lesson_dict = OrderedDict()
     data = []
-    for unit1 in lesson_list[int(lesson)-1][1]:
-        for assignment in unit1[1]:
-            lesson_dict[assignment[2]] = assignment
+    if lesson == 1:
+        assignments = lesson_list1
+        work_dict = dict(((work.index, work) for work in Work.objects.filter(typing=typing, user_id=request.user.id, lesson=lesson)))
+
+        for assignment in assignments:
+            sworks = list(filter(lambda w: w.index==assignment[3], work_pool))
+            #assistant = list(filter(lambda w: (w.index==assignment[2] and w.group==group), assistant_pool))
+            if len(sworks)>0 :
+                #if len(assistant) > 0:
+                #    lesson_dict[assignment[0]] = [assignment[1], assignment[2], sworks[0], 0, assistant[0].student_id]
+                #else :
+                lesson_dict[assignment[3]] = [assignment[1], assignment[2], sworks[0], 0, 0]                        
+            else :
+                lesson_dict[assignment[3]] = [assignment[1],  assignment[2], None, 0]
+    elif lesson == 2 or lesson == 3:
+        assignments = lesson_list      
+        unit_count = 1
+        for unit in lesson_list[int(lesson)-2][1]:
+            for assignment in unit[1]: 
+                sworks = list(filter(lambda w: w.index==assignment[2], work_pool))
+                #assistant = list(filter(lambda w: (w.index==assignment[2] and w.group==group), assistant_pool))
+                if len(sworks)>0:
+                    lesson_dict[assignment[2]] = [unit[0], assignment[0], sworks[0], unit_count, 0]                        
+                else :
+                    lesson_dict[assignment[2]] = [unit[0], assignment[0], None, unit_count]
     lesson_list2 = sorted(lesson_dict.items())
     for enroll in enrolls:
       enroll_score = []
@@ -1792,39 +1837,41 @@ def grade_excel(request, typing, unit, classroom_id):
       memo = 0 
       grade = 0
       stu_works = filter(lambda w: w.user_id == enroll.student_id, work_pool)
+
+ 
       if typing == 0:
         lesson_list2 = lesson_list2
       elif typing == 1:
         lesson_list2 = TWork.objects.filter(classroom_id=classroom_id)
-      for index, assignment in enumerate(lesson_list2):
+      for index, assignment in lesson_list2:
             if typing == 0: 			    
-                works = list(filter(lambda w: w.index == index+1, stu_works))
+                works = list(filter(lambda w: w.index == index and w.user_id==enroll.student_id, work_pool))
             else :
-                works = list(filter(lambda w: w.index == assignment.id, stu_works))
+                works = list(filter(lambda w: w.index == assignment.id and w.user_id==enroll.student_id, work_pool))
             works_count = len(works)
             if works_count == 0:
                 enroll_score.append(["X", index])
                 if typing == 0 or typing == 1:
                     total += 60
-            else:
+            else :
                 work = works[-1]
-                enroll_score.append([work.score, index])
-                if work.score == -1:
-                    if typing == 0 or typing == 1:
-                        total += 80
-                else:
+                if work.score == -1 :
+                    enroll_score.append(["V", index])
+                    total += 80
+                else :
+                    enroll_score.append([work.score, index])
                     total += work.score
-
-            if typing == 0:
-                memo0 = enroll.score_memo0
-                memo1 = enroll.score_memo1
-                memo2 = enroll.score_memo2                                
-            elif typing == 1:
-                memo0 = enroll.score_memo0_custom
-                memo1 = enroll.score_memo1_custom
-                memo2 = enroll.score_memo2_custom
-            memo = [memo0, memo1, memo2] 
-            grade = int(total / len(lesson_list2) * 0.6 + memo[0] * 0.4)
+  
+      if typing == 0:
+              memo0 = enroll.score_memo0
+              memo1 = enroll.score_memo1
+              memo2 = enroll.score_memo2                                
+      elif typing == 1:
+              memo0 = enroll.score_memo0_custom
+              memo1 = enroll.score_memo1_custom
+              memo2 = enroll.score_memo2_custom
+      memo = [memo0, memo1, memo2] 
+      grade = int(total / len(lesson_list2) * 0.6 + memo[0] * 0.4)
       data.append([enroll, enroll_score, memo, grade])
                 
     output = io.BytesIO()
@@ -1840,9 +1887,9 @@ def grade_excel(request, typing, unit, classroom_id):
     worksheet.write(row, 5, u"心得(上)") 
     worksheet.write(row, 6, u"心得(下)")       
     index = 7
-    for assignment in lesson_list2:
+    for index2, assignment in lesson_list2:
         if typing == 0:
-	          worksheet.write(row, index, assignment[1][0])
+	          worksheet.write(row, index, assignment[1])
         else :
 	          worksheet.write(row, index, assignment.title)              
         index += 1
@@ -1851,7 +1898,7 @@ def grade_excel(request, typing, unit, classroom_id):
     index = 4
     if not typing == 0:
         row += 1
-        for assignment in lesson_list2:            
+        for index2, assignment in lesson_list2:            
             worksheet.write(row, index, datetime.strptime(str(assignment.time)[:19],'%Y-%m-%d %H:%M:%S'), date_format)
             index += 1			
 
@@ -1865,11 +1912,9 @@ def grade_excel(request, typing, unit, classroom_id):
       worksheet.write(row, 6, memo[2])            
       index = 7
       for score, index2 in enroll_score:
-          if score == -1 :
-              worksheet.write(row, index, "V")
-          else :
-              worksheet.write(row, index, score)
-          index +=1 
+          worksheet.write(row, index, score)
+          index +=1
+
  
 
     workbook.close()

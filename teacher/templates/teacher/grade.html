@@ -46,7 +46,7 @@
   <td>下學期</td>
   {% for assignment in lesson_list %}      
     <td align="center" style="padding:0px">  
-  {% if typing == 0 %}{{assignment.1.0}}{% else %}{{forloop.counter}}{% endif %}
+  {% if typing == 0 %}{{assignment.1.1}}{% else %}{{forloop.counter}}{% endif %}
    </td>
   {% endfor %}
   </tr>
